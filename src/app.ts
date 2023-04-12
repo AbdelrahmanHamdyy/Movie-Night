@@ -4,7 +4,7 @@ import { MysqlError } from "mysql";
 import bodyParser from "body-parser";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
-import conn from "./database";
+import client from "./database";
 import dotenv from "dotenv";
 
 const port = process.env.PORT || 3000;
@@ -41,7 +41,7 @@ const specs = swaggerJsDoc(options);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 try {
-  conn.connect((err: MysqlError) => {
+  client.connect((err: MysqlError) => {
     if (err) throw err;
     console.log("Connected to MYSQL");
   });

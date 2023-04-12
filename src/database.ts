@@ -15,11 +15,11 @@ const HOST = process.env.DB_HOST;
 const USERNAME = process.env.DB_USERNAME;
 const PASSWORD = process.env.DB_PASSWORD;
 
-let conn = createConnection({
+let client = createConnection({
   host: HOST,
   user: USERNAME,
   password: PASSWORD,
   database: DB_NAME,
 });
 
-export default conn;
+export default client;
