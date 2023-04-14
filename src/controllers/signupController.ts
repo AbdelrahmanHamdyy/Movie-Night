@@ -1,43 +1,8 @@
 import { Request, Response } from "express";
-import { body, query, param } from "express-validator";
 import { User, UserData, newUser } from "../models/User";
 import { verifyUser } from "../services/userServices";
 
 const user = new User();
-
-// Validators
-const signupValidator = [
-  body("email")
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage("Email can't be empty")
-    .isEmail()
-    .withMessage("Email must be a valid email"),
-  body("username")
-    .not()
-    .isEmpty()
-    .withMessage("Username can't be empty")
-    .trim()
-    .escape()
-    .isAlphanumeric()
-    .withMessage("Username should consist of letters and numbers only"),
-  body("password")
-    .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 chars long"),
-  body("firstName")
-    .not()
-    .isEmpty()
-    .withMessage("First Name can't be empty")
-    .isAlpha()
-    .withMessage("First name should consist of letters only"),
-  body("lastName")
-    .not()
-    .isEmpty()
-    .withMessage("Last name can't be empty")
-    .isAlpha()
-    .withMessage("Last name should consist of letters only"),
-];
 
 const signup = async (req: Request, res: Response) => {
   try {
@@ -50,6 +15,9 @@ const signup = async (req: Request, res: Response) => {
     };
     await user.create(userObj);
     const createdUser = await user.getUserByUsername(userObj.username);
+    if (!createdUser) {
+      return res.status(400).json({ error: "Error in creating user" });
+    }
     const result = await verifyUser(createdUser);
     return res.status(result.statusCode).json(result.body);
   } catch (err) {
@@ -58,7 +26,36 @@ const signup = async (req: Request, res: Response) => {
   }
 };
 
+const usernameAvailable = async (req: Request, res: Response) => {
+  try {
+    const username = req.query.username as string;
+    const result = await user.getUserByUsername(username);
+    if (result) {
+      return res.status(409).json("Username is already taken");
+    }
+    return res.status(200).json("Username is available");
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json("Internal Server Error");
+  }
+};
+
+const emailAvailable = async (req: Request, res: Response) => {
+  try {
+    const email = req.query.email as string;
+    const result = await user.getUserByEmail(email);
+    if (result) {
+      return res.status(409).json("Email is already taken");
+    }
+    return res.status(200).json("Email is available");
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json("Internal Server Error");
+  }
+};
+
 export default {
-  signupValidator,
   signup,
+  usernameAvailable,
+  emailAvailable,
 };
