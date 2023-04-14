@@ -89,9 +89,10 @@ export class User {
   async getUserByUsername(username: string): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE username=$1 AND deletedAt=$2;";
+      const sql =
+        "SELECT * FROM users WHERE username=$1 AND deletedAt is NULL;";
 
-      const result = await conn.query(sql, [username, null]);
+      const result = await conn.query(sql, [username]);
       conn.release();
 
       return result.rows[0];
@@ -104,9 +105,9 @@ export class User {
   async getUserByEmail(email: string): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE email=$1 AND deletedAt=$2;";
+      const sql = "SELECT * FROM users WHERE email=$1 AND deletedAt is NULL;";
 
-      const result = await conn.query(sql, [email, null]);
+      const result = await conn.query(sql, [email]);
       conn.release();
 
       return result.rows[0];
