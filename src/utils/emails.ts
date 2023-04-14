@@ -5,7 +5,7 @@ import { UserData } from "../models/User";
 
 dotenv.config();
 
-const API_KEY: any = process.env.SENDGRID_API_KEY;
+const API_KEY = process.env.SENDGRID_API_KEY as string;
 const SENDER_EMAIL = process.env.SENDER_EMAIL;
 const BASE = "localhost:3000";
 

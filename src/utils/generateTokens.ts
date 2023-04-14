@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const TOKEN_SECRET: any = process.env.TOKEN_SECRET;
+const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
 const verifyToken = new Token();
 
 /**
