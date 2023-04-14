@@ -8,14 +8,6 @@ type responseObject = {
 };
 
 export async function verifyUser(user: UserData): Promise<responseObject> {
-  if (!user) {
-    return {
-      statusCode: 400,
-      body: {
-        error: "User not found",
-      },
-    };
-  }
   const token = await generateVerifyToken(user.id, "verifyEmail");
   const emailSent = sendVerifyEmail(user, token);
 
