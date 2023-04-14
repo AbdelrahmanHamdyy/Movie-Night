@@ -1,6 +1,11 @@
 import express from "express";
 import { validateRequestSchema } from "../middlewares/validationResult";
 import signupController from "../controllers/signupController";
+import {
+  signupValidator,
+  emailValidator,
+  usernameValidator,
+} from "../validators/signupValidators";
 
 const signupRouter = express.Router();
 
@@ -71,7 +76,7 @@ const signupRouter = express.Router();
  */
 signupRouter.post(
   "/signup",
-  signupController.signupValidator,
+  signupValidator,
   validateRequestSchema,
   signupController.signup
 );
@@ -106,7 +111,11 @@ signupRouter.post(
  *       500:
  *         description: Internal server error
  */
-signupRouter.get("/username-available");
+signupRouter.get(
+  "/username-available",
+  usernameValidator,
+  signupController.usernameAvailable
+);
 
 /**
  * @swagger
@@ -138,7 +147,11 @@ signupRouter.get("/username-available");
  *       500:
  *         description: Internal server error
  */
-signupRouter.get("/email-available");
+signupRouter.get(
+  "/email-available",
+  emailValidator,
+  signupController.emailAvailable
+);
 
 /**
  * @swagger
