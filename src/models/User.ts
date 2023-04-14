@@ -59,9 +59,9 @@ export class User {
   async index(): Promise<UserData[]> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users;";
+      const sql = "SELECT * FROM users WHERE deletedAt=$1;";
 
-      const users = await conn.query(sql);
+      const users = await conn.query(sql, [null]);
       conn.release();
 
       return users.rows;
@@ -74,9 +74,9 @@ export class User {
   async getUserById(id: number): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE id=$1;";
+      const sql = "SELECT * FROM users WHERE id=$1 AND deletedAt=$2;";
 
-      const result = await conn.query(sql, [id]);
+      const result = await conn.query(sql, [id, null]);
       client.release();
 
       return result.rows[0];
@@ -89,15 +89,30 @@ export class User {
   async getUserByUsername(username: string): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE username=$1;";
+      const sql = "SELECT * FROM users WHERE username=$1 AND deletedAt=$2;";
 
-      const result = await conn.query(sql, [username]);
+      const result = await conn.query(sql, [username, null]);
       conn.release();
 
       return result.rows[0];
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to get user with username ${username}!`);
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<UserData> {
+    try {
+      const conn = await client.connect();
+      const sql = "SELECT * FROM users WHERE email=$1 AND deletedAt=$2;";
+
+      const result = await conn.query(sql, [email, null]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to get user with email ${email}!`);
     }
   }
 
