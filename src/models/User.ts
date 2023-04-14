@@ -4,161 +4,159 @@ import bcrypt from "bcrypt";
 const PEPPER = process.env.BCRYPT_PASSWORD;
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
-export type UserData = {
-  id?: number;
+export type newUser = {
   firstName: string;
   lastName: string;
   email: string;
   username: string;
   password: string;
-  gender: string;
-  country: string;
-  avatar: string;
+};
+
+export type UserData = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  gender?: string;
+  country?: string;
+  avatar?: string;
+  verifiedEmail?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 };
 
 export class User {
-  create(user: UserData): UserData {
+  async create(user: newUser): Promise<UserData> {
     try {
+      const conn = await client.connect();
       const sql =
-        "INSERT INTO users(firstName, lastName, email, username, password, gender, country, avatar) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;";
+        "INSERT INTO users(firstName, lastName, email, username, password) VALUES($1, $2, $3, $4, $5);";
 
       const hash = bcrypt.hashSync(
         user.password + PEPPER,
         parseInt(SALT_ROUNDS as string)
       );
 
-      let createdUser: any;
-      client.query(
-        sql,
-        [
-          user.firstName,
-          user.lastName,
-          user.email,
-          user.username,
-          user.password,
-          user.gender,
-          user.country,
-          user.avatar,
-          hash,
-        ],
-        (error, result, fields) => {
-          if (error) throw error;
-          createdUser = result.rows[0];
-        }
-      );
-      client.end();
+      const result = await conn.query(sql, [
+        user.firstName,
+        user.lastName,
+        user.email,
+        user.username,
+        hash,
+      ]);
+      conn.release();
 
-      return createdUser;
+      return result.rows[0];
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to create user ${user.firstName}!`);
     }
   }
 
-  index(): UserData[] {
+  async index(): Promise<UserData[]> {
     try {
+      const conn = await client.connect();
       const sql = "SELECT * FROM users;";
 
-      let users: any;
-      client.query(sql, (error, result, fields) => {
-        if (error) throw error;
-        users = result.rows;
-      });
-      client.end();
+      const users = await conn.query(sql);
+      conn.release();
 
-      return users;
+      return users.rows;
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to index all users!`);
     }
   }
 
-  get(id: number): UserData {
+  async getUserById(id: number): Promise<UserData> {
     try {
+      const conn = await client.connect();
       const sql = "SELECT * FROM users WHERE id=$1;";
 
-      let user: any;
-      client.query(sql, [id], (error, result, fields) => {
-        if (error) throw error;
-        user = result.rows[0];
-      });
-      client.end();
+      const result = await conn.query(sql, [id]);
+      client.release();
 
-      return user;
+      return result.rows[0];
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to get user with id ${id}!`);
     }
   }
 
-  update(user: UserData): UserData {
+  async getUserByUsername(username: string): Promise<UserData> {
     try {
+      const conn = await client.connect();
+      const sql = "SELECT * FROM users WHERE username=$1;";
+
+      const result = await conn.query(sql, [username]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to get user with username ${username}!`);
+    }
+  }
+
+  async update(user: UserData): Promise<UserData> {
+    try {
+      const conn = await client.connect();
       const sql =
-        "UPDATE users SET firstName=$1, lastName=$2, email=$3, username=$4, password=$5, gender=$6, country=$7, avatar=$8 WHERE id=$9 RETURNING *;";
+        "UPDATE users SET firstName=$1, lastName=$2, email=$3, username=$4, password=$5, gender=$6, country=$7, avatar=$8 WHERE id=$9;";
 
-      let updatedUser: any;
-      client.query(
-        sql,
-        [
-          user.firstName,
-          user.lastName,
-          user.email,
-          user.username,
-          user.password,
-          user.gender,
-          user.country,
-          user.avatar,
-          user.id,
-        ],
-        (error, result) => {
-          if (error) throw error;
-          updatedUser = result.rows[0];
-        }
-      );
-      client.end();
+      const result = await conn.query(sql, [
+        user.firstName,
+        user.lastName,
+        user.email,
+        user.username,
+        user.password,
+        user.gender,
+        user.country,
+        user.avatar,
+        user.id,
+      ]);
+      conn.release();
 
-      return updatedUser;
+      return result.rows[0];
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to update user ${user.firstName}!`);
     }
   }
 
-  destroy(id: number): Promise<User> {
+  async destroy(id: number): Promise<UserData> {
     try {
-      const sql = "UPDATE users SET deletedAt=$1 WHERE id=$2 RETURNING *;";
+      const conn = await client.connect();
+      const sql = "UPDATE users SET deletedAt=$1 WHERE id=$2;";
 
-      let deletedUser: any;
-      client.query(sql, [id], (error, result) => {
-        if (error) throw error;
-        deletedUser = result.rows[0];
-      });
-      client.end();
+      const result = await client.query(sql, [Date.now(), id]);
+      conn.release();
 
-      return deletedUser;
+      return result.rows[0];
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to delete user with id ${id}!`);
     }
   }
 
-  authenticate(user: UserData): UserData | null {
+  async authenticate(user: UserData): Promise<UserData | null> {
     try {
-      const sql = "SELECT * FROM users WHERE username=$1";
+      const conn = await client.connect();
+      const sql = "SELECT * FROM users WHERE id=$1";
 
-      let authUser: any;
-      client.query(sql, [user.id], (error, result) => {
-        if (error) throw error;
-        else if (result.rows.length) {
-          authUser = result.rows[0];
-          if (!bcrypt.compareSync(user.password + PEPPER, authUser.password)) {
-            authUser = null;
-          }
+      const result = await client.query(sql, [user.id]);
+      if (result.rows.length) {
+        const authUser = result.rows[0];
+        if (bcrypt.compareSync(user.password + PEPPER, authUser.password)) {
+          return authUser;
         }
-      });
-      client.end();
+      }
+      conn.release();
 
-      return authUser;
+      return null;
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to authenticate user ${user.firstName}`);
