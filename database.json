@@ -1,6 +1,6 @@
 {
   "dev": {
-    "driver": "mysql",
+    "driver": "pg",
     "host": { "ENV": "DB_HOST" },
     "port": { "ENV": "DB_PORT" },
     "database": { "ENV": "DB_NAME" },
@@ -8,7 +8,7 @@
     "password": { "ENV": "DB_PASSWORD" }
   },
   "test": {
-    "driver": "mysql",
+    "driver": "pg",
     "host": { "ENV": "DB_HOST" },
     "port": { "ENV": "DB_PORT" },
     "database": { "ENV": "DB_NAME_TESTING" },
