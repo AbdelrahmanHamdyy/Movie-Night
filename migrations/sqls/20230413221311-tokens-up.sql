@@ -1,0 +1,7 @@
+CREATE TABLE tokens (
+    userId INT NOT NULL,
+    token VARCHAR(255) NOT NULL PRIMARY KEY,
+    expireAt TIMESTAMP DEFAULT (NOW() + '1 day'::interval),
+    type VARCHAR(255) NOT NULL,
+    CONSTRAINT FK FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE
+);
