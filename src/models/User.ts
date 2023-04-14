@@ -4,16 +4,8 @@ import bcrypt from "bcrypt";
 const PEPPER = process.env.BCRYPT_PASSWORD;
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
-export type newUser = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  password: string;
-};
-
 export type UserData = {
-  id: number;
+  id?: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -29,7 +21,7 @@ export type UserData = {
 };
 
 export class User {
-  async create(user: newUser): Promise<UserData> {
+  async create(user: UserData): Promise<UserData> {
     try {
       const conn = await client.connect();
       const sql =

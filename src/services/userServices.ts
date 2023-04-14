@@ -17,7 +17,7 @@ type responseObject = {
  * @returns {Object} Response to the request containing [statusCode, body]
  */
 export async function verifyUser(user: UserData): Promise<responseObject> {
-  const token = await generateVerifyToken(user.id, "verifyEmail");
+  const token = await generateVerifyToken(user.id as number, "verifyEmail");
   const emailSent = sendVerifyEmail(user, token);
 
   if (!emailSent) {

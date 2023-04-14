@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { User, UserData, newUser } from "../models/User";
+import { User, UserData } from "../models/User";
 import { verifyUser } from "../services/userServices";
 
 const user = new User();
 
 const signup = async (req: Request, res: Response) => {
   try {
-    const userObj: newUser = {
+    const userObj: UserData = {
       username: req.body.username,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
