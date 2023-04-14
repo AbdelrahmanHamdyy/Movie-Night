@@ -1,6 +1,6 @@
 // @ts-nocheck
 import dotenv from "dotenv";
-import { createConnection } from "mysql";
+import { Pool } from "pg";
 
 dotenv.config();
 
@@ -14,12 +14,14 @@ if (process.env.NODE_ENV.trim() === "testing") {
 const HOST = process.env.DB_HOST;
 const USERNAME = process.env.DB_USERNAME;
 const PASSWORD = process.env.DB_PASSWORD;
+const PORT = process.env.DB_PORT;
 
-let client = createConnection({
+let client = new Pool({
+  database: DB_NAME,
   host: HOST,
+  port: Number(PORT),
   user: USERNAME,
   password: PASSWORD,
-  database: DB_NAME,
 });
 
 export default client;
