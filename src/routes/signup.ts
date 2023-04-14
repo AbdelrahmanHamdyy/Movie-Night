@@ -114,6 +114,7 @@ signupRouter.post(
 signupRouter.get(
   "/username-available",
   usernameValidator,
+  validateRequestSchema,
   signupController.usernameAvailable
 );
 
@@ -150,6 +151,7 @@ signupRouter.get(
 signupRouter.get(
   "/email-available",
   emailValidator,
+  validateRequestSchema,
   signupController.emailAvailable
 );
 
