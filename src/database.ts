@@ -6,7 +6,7 @@ dotenv.config();
 
 let DB_NAME;
 if (process.env.NODE_ENV.trim() === "testing") {
-  DB_NAME = process.env.DB_NAME_TSESTING.trim();
+  DB_NAME = process.env.DB_NAME_TESTING.trim();
 } else {
   DB_NAME = process.env.DB_NAME.trim();
 }
