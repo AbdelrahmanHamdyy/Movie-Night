@@ -3,6 +3,10 @@ import { sendResetPasswordEmail, sendVerifyEmail } from "../utils/emails";
 import { User, UserData } from "../models/User";
 import { Token } from "../models/Token";
 import ReqError from "../utils/error";
+import bcrypt from "bcrypt";
+
+const PEPPER = process.env.BCRYPT_PASSWORD;
+const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 const userModel = new User();
 const verifyToken = new Token();
@@ -145,15 +149,22 @@ export async function authenticateUser(
  * This function verifies that there is a verification token stored for the given
  * user and that it hasn't been expired. If a false result was returned then an error is
  * thrown, else it continues to update the verified_email attribute to true for the user which
- * means that their email has been verified successfully
+ * means that their email has been verified successfully if type is "verifyEmail", and if type
+ * is "resetPassword", it calls the changePassword function to perform the password checks and update it
  *
- * @param {UserData} user User ID
+ * @param {UserData} user User Object
  * @param {string} token Verification token
+ * @param {string} type Type of this token: "verifyEmail" or "resetPassword"
+ * @param {string} newPassword New password entered (Only when type is "resetPassword")
+ * @param {string} verifyPassword Repeated password entered (Only when type is "resetPassword")
  * @returns {void}
  */
 export async function checkVerificationToken(
   user: UserData,
-  token: string
+  token: string,
+  type: string,
+  newPassword?: string,
+  verifyPassword?: string
 ): Promise<void> {
   const verified = await verifyToken.validate(user.id as number, token);
   if (!verified) {
@@ -161,7 +172,42 @@ export async function checkVerificationToken(
     error.statusCode = 403;
     throw error;
   }
-  user.verified_email = true;
+  if (type === "verifyEmail") {
+    user.verified_email = true;
+    await userModel.update(user);
+  } else {
+    await changePassword(user, newPassword as string, verifyPassword as string);
+  }
+  await verifyToken.destroy(user.id as number, type);
+}
+
+/**
+ * The function is responsible for changing the user's password. It makes sure
+ * that the new given password is the same as the repeated password,
+ * else throws an error, and then encrypts it using bcrypt's hash functions.
+ * The user is then updated with the new hashed password
+ *
+ * @param {UserData} user User ID
+ * @param {string} newPassword New password entered by the user
+ * @param {string} verifyPassword Repeated password to ensure it's identical to the new one
+ * @returns {void}
+ */
+export async function changePassword(
+  user: UserData,
+  newPassword: string,
+  verifyPassword: string
+): Promise<void> {
+  if (newPassword !== verifyPassword) {
+    const error = new ReqError("Passwords do not match");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const hash = bcrypt.hashSync(
+    newPassword + PEPPER,
+    parseInt(SALT_ROUNDS as string)
+  );
+
+  user.password = hash;
   await userModel.update(user);
-  await verifyToken.destroy(user.id as number, "verifyEmail");
 }
