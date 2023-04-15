@@ -199,34 +199,4 @@ signupRouter.post(
   signupController.verifyEmail
 );
 
-/**
- * @swagger
- * /random-username:
- *   get:
- *     summary: Get an available random username as a suggestion when creating an account
- *     tags: [Sign-up]
- *     parameters:
- *       - in: query
- *         name: count
- *         description: Number of random usernames to be generated
- *         required: true
- *         schema:
- *           type: number
- *     responses:
- *       201:
- *         description: Usernames generated successfully
- *         content:
- *           application/json:
- *             schema:
- *               properties:
- *                 usernames:
- *                   type: array
- *                   description: Array containing random usernames (Size = count)
- *                   items:
- *                     type: string
- *       500:
- *         description: Internal server error
- */
-signupRouter.get("/random-username");
-
 export default signupRouter;
