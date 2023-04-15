@@ -159,7 +159,7 @@ export async function authenticateUser(
  * @param {string} verifyPassword Repeated password entered (Only when type is "resetPassword")
  * @returns {void}
  */
-export async function checkVerificationToken(
+export async function verifyTokenAndUpdate(
   user: UserData,
   token: string,
   type: string,

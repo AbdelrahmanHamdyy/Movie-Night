@@ -4,7 +4,7 @@ import {
   authenticateUser,
   changePassword,
   checkUserById,
-  checkVerificationToken,
+  verifyTokenAndUpdate,
   forgetPasswordEmail,
   verifyUsernameAndEmail,
 } from "../services/userServices";
@@ -58,7 +58,7 @@ const resetPassword = async (req: Request, res: Response) => {
     const verifyPassword = req.body.verifyPassword;
 
     const user = await checkUserById(id);
-    await checkVerificationToken(
+    await verifyTokenAndUpdate(
       user,
       token,
       "resetPassword",
