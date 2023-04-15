@@ -4,6 +4,7 @@ import loginController from "../controllers/loginController";
 import {
   forgetPasswordValidator,
   loginValidator,
+  resetPasswordValidator,
 } from "../validators/loginValidators";
 
 const loginRouter = express.Router();
@@ -162,7 +163,12 @@ loginRouter.post(
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/reset-password/:id/:token");
+loginRouter.post(
+  "/reset-password/:id/:token",
+  resetPasswordValidator,
+  validateRequestSchema,
+  loginController.resetPassword
+);
 
 /**
  * @swagger
