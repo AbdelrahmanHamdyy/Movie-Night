@@ -8,9 +8,9 @@ const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
  * the authorization header of a request and send back status code 401
  * with error message if the token is invalid or not provided
  *
- * @param {Object} req Request object
- * @param {Object} res Response object
- * @param {function} next Next function
+ * @param {Request} req Request object
+ * @param {Response} res Response object
+ * @param {NextFunction} next Next function
  * @returns {void}
  */
 export function verifyAuthToken(

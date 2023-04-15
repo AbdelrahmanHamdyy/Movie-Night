@@ -6,16 +6,16 @@ import { Request, Response, NextFunction } from "express";
  * according to validators using the validationResult function from the
  * express-validator package
  *
- * @param {Object} req Request object
- * @param {Object} res Response object
- * @param {function} next Next function
+ * @param {Request} req Request object
+ * @param {Response} res Response object
+ * @param {NextFunction} next Next function
  * @returns {void}
  */
 export function validateRequestSchema(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): any {
   const result = validationResult(req);
   if (!result.isEmpty()) {
     let errors: string[] = [];
