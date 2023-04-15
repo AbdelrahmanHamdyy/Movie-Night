@@ -1,7 +1,7 @@
 import client from "../database";
 
 export type TokenData = {
-  userId: number;
+  user_id: number;
   token: string;
   expire_at?: Date;
   type: string;
@@ -11,10 +11,11 @@ export class Token {
   async create(verifyToken: TokenData): Promise<TokenData> {
     try {
       const conn = await client.connect();
-      const sql = "INSERT INTO tokens(userId, token, type) VALUES($1, $2, $3);";
+      const sql =
+        "INSERT INTO tokens(user_id, token, type) VALUES($1, $2, $3);";
 
       const result = await client.query(sql, [
-        verifyToken.userId,
+        verifyToken.user_id,
         verifyToken.token,
         verifyToken.type,
       ]);
@@ -23,11 +24,13 @@ export class Token {
       return result.rows[0];
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to create token for user ${verifyToken.userId}!`);
+      throw new Error(
+        `Failed to create token for user ${verifyToken.user_id}!`
+      );
     }
   }
 
-  async validate(userId: number, token: string): Promise<boolean> {
+  async validate(user_id: number, token: string): Promise<boolean> {
     try {
       const conn = await client.connect();
       const sql = "SELECT * FROM tokens WHERE token=$1;";
@@ -37,7 +40,7 @@ export class Token {
 
       const verifyToken = result.rows[0];
       if (
-        verifyToken?.userid === userId &&
+        verifyToken?.user_id === user_id &&
         verifyToken?.expire_at > Date.now()
       ) {
         return true;
@@ -45,16 +48,16 @@ export class Token {
       return false;
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to create token for user ${userId}!`);
+      throw new Error(`Failed to create token for user ${user_id}!`);
     }
   }
 
-  async destroy(userId: number, type: string): Promise<TokenData> {
+  async destroy(user_id: number, type: string): Promise<TokenData> {
     try {
       const conn = await client.connect();
-      const sql = "DELETE FROM tokens WHERE userId=$1 AND type=$2;";
+      const sql = "DELETE FROM tokens WHERE user_id=$1 AND type=$2;";
 
-      const result = await conn.query(sql, [userId, type]);
+      const result = await conn.query(sql, [user_id, type]);
       conn.release();
 
       return result.rows[0];
