@@ -6,15 +6,15 @@ const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 export type UserData = {
   id?: number;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
   username: string;
   password: string;
   gender?: string;
   country?: string;
   avatar?: string;
-  verifiedEmail?: boolean;
+  verifiedemail?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;
@@ -33,8 +33,8 @@ export class User {
       );
 
       const result = await conn.query(sql, [
-        user.firstName,
-        user.lastName,
+        user.firstname,
+        user.lastname,
         user.email,
         user.username,
         hash,
@@ -44,7 +44,7 @@ export class User {
       return result.rows[0];
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to create user ${user.firstName}!`);
+      throw new Error(`Failed to create user ${user.firstname}!`);
     }
   }
 
@@ -66,10 +66,10 @@ export class User {
   async getUserById(id: number): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE id=$1 AND deletedAt=$2;";
+      const sql = "SELECT * FROM users WHERE id=$1 AND deletedAt is NULL;";
 
-      const result = await conn.query(sql, [id, null]);
-      client.release();
+      const result = await conn.query(sql, [id]);
+      conn.release();
 
       return result.rows[0];
     } catch (error) {
@@ -113,17 +113,18 @@ export class User {
     try {
       const conn = await client.connect();
       const sql =
-        "UPDATE users SET firstName=$1, lastName=$2, email=$3, username=$4, password=$5, gender=$6, country=$7, avatar=$8 WHERE id=$9;";
+        "UPDATE users SET firstName=$1, lastName=$2, email=$3, username=$4, password=$5, gender=$6, country=$7, avatar=$8, verifiedEmail=$9 WHERE id=$10;";
 
       const result = await conn.query(sql, [
-        user.firstName,
-        user.lastName,
+        user.firstname,
+        user.lastname,
         user.email,
         user.username,
         user.password,
         user.gender,
         user.country,
         user.avatar,
+        user.verifiedemail,
         user.id,
       ]);
       conn.release();
@@ -131,7 +132,7 @@ export class User {
       return result.rows[0];
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to update user ${user.firstName}!`);
+      throw new Error(`Failed to update user ${user.firstname}!`);
     }
   }
 
@@ -167,7 +168,7 @@ export class User {
       return null;
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to authenticate user ${user.firstName}`);
+      throw new Error(`Failed to authenticate user ${user.firstname}`);
     }
   }
 }
