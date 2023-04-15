@@ -32,11 +32,14 @@ export class Token {
       const conn = await client.connect();
       const sql = "SELECT * FROM tokens WHERE token=$1;";
 
-      const result = conn.query(sql, [token]);
+      const result = await conn.query(sql, [token]);
       conn.release();
 
       const verifyToken = result.rows[0];
-      if (verifyToken.userId == userId && verifyToken.expireAt > Date.now()) {
+      if (
+        verifyToken?.userid === userId &&
+        verifyToken?.expireat > Date.now()
+      ) {
         return true;
       }
       return false;
