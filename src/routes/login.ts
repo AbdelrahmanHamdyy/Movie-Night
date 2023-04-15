@@ -1,6 +1,7 @@
 import express from "express";
 import { validateRequestSchema } from "../middlewares/validationResult";
 import loginController from "../controllers/loginController";
+import { loginValidator } from "../validators/loginValidators";
 
 const loginRouter = express.Router();
 
@@ -57,7 +58,12 @@ const loginRouter = express.Router();
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/login");
+loginRouter.post(
+  "/login",
+  loginValidator,
+  validateRequestSchema,
+  loginController.login
+);
 
 /**
  * @swagger
