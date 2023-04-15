@@ -20,13 +20,13 @@ export const signupValidator = [
   body("password")
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 chars long"),
-  body("firstName")
+  body("first_name")
     .not()
     .isEmpty()
     .withMessage("First Name can't be empty")
     .isAlpha()
     .withMessage("First name should consist of letters only"),
-  body("lastName")
+  body("last_name")
     .not()
     .isEmpty()
     .withMessage("Last name can't be empty")

@@ -6,18 +6,18 @@ const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 export type UserData = {
   id?: number;
-  firstname: string;
-  lastname: string;
+  first_name: string;
+  last_name: string;
   email: string;
   username: string;
   password: string;
   gender?: string;
   country?: string;
   avatar?: string;
-  verifiedemail?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date | null;
+  verified_email?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+  deleted_at?: Date | null;
 };
 
 export class User {
@@ -25,7 +25,7 @@ export class User {
     try {
       const conn = await client.connect();
       const sql =
-        "INSERT INTO users(firstName, lastName, email, username, password) VALUES($1, $2, $3, $4, $5);";
+        "INSERT INTO users(first_name, last_name, email, username, password) VALUES($1, $2, $3, $4, $5);";
 
       const hash = bcrypt.hashSync(
         user.password + PEPPER,
@@ -33,8 +33,8 @@ export class User {
       );
 
       const result = await conn.query(sql, [
-        user.firstname,
-        user.lastname,
+        user.first_name,
+        user.last_name,
         user.email,
         user.username,
         hash,
@@ -44,14 +44,14 @@ export class User {
       return result.rows[0];
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to create user ${user.firstname}!`);
+      throw new Error(`Failed to create user ${user.first_name}!`);
     }
   }
 
   async index(): Promise<UserData[]> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE deletedAt=$1;";
+      const sql = "SELECT * FROM users WHERE deleted_at=$1;";
 
       const users = await conn.query(sql, [null]);
       conn.release();
@@ -66,7 +66,7 @@ export class User {
   async getUserById(id: number): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE id=$1 AND deletedAt is NULL;";
+      const sql = "SELECT * FROM users WHERE id=$1 AND deleted_at is NULL;";
 
       const result = await conn.query(sql, [id]);
       conn.release();
@@ -82,7 +82,7 @@ export class User {
     try {
       const conn = await client.connect();
       const sql =
-        "SELECT * FROM users WHERE username=$1 AND deletedAt is NULL;";
+        "SELECT * FROM users WHERE username=$1 AND deleted_at is NULL;";
 
       const result = await conn.query(sql, [username]);
       conn.release();
@@ -97,7 +97,7 @@ export class User {
   async getUserByEmail(email: string): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE email=$1 AND deletedAt is NULL;";
+      const sql = "SELECT * FROM users WHERE email=$1 AND deleted_at is NULL;";
 
       const result = await conn.query(sql, [email]);
       conn.release();
@@ -113,18 +113,18 @@ export class User {
     try {
       const conn = await client.connect();
       const sql =
-        "UPDATE users SET firstName=$1, lastName=$2, email=$3, username=$4, password=$5, gender=$6, country=$7, avatar=$8, verifiedEmail=$9 WHERE id=$10;";
+        "UPDATE users SET first_name=$1, last_name=$2, email=$3, username=$4, password=$5, gender=$6, country=$7, avatar=$8, verified_email=$9 WHERE id=$10;";
 
       const result = await conn.query(sql, [
-        user.firstname,
-        user.lastname,
+        user.first_name,
+        user.last_name,
         user.email,
         user.username,
         user.password,
         user.gender,
         user.country,
         user.avatar,
-        user.verifiedemail,
+        user.verified_email,
         user.id,
       ]);
       conn.release();
@@ -132,14 +132,14 @@ export class User {
       return result.rows[0];
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to update user ${user.firstname}!`);
+      throw new Error(`Failed to update user ${user.first_name}!`);
     }
   }
 
   async destroy(id: number): Promise<UserData> {
     try {
       const conn = await client.connect();
-      const sql = "UPDATE users SET deletedAt=$1 WHERE id=$2;";
+      const sql = "UPDATE users SET deleted_at=$1 WHERE id=$2;";
 
       const result = await client.query(sql, [Date.now(), id]);
       conn.release();
@@ -168,7 +168,7 @@ export class User {
       return null;
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to authenticate user ${user.firstname}`);
+      throw new Error(`Failed to authenticate user ${user.first_name}`);
     }
   }
 }

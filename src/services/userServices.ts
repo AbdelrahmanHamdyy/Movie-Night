@@ -64,7 +64,7 @@ export async function checkUser(id: number): Promise<UserData> {
 /**
  * This function verifies that there is a verification token stored for the given
  * user and that it hasn't been expired. If a false result was returned then an error is
- * thrown, else it continues to update the verifiedEmail attribute to true for the user which
+ * thrown, else it continues to update the verified_email attribute to true for the user which
  * means that their email has been verified successfully
  *
  * @param {UserData} user User ID
@@ -81,7 +81,7 @@ export async function checkVerificationToken(
     error.statusCode = 403;
     throw error;
   }
-  user.verifiedemail = true;
+  user.verified_email = true;
   await userModel.update(user);
   await verifyToken.destroy(user.id as number, "verifyEmail");
 }

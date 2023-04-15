@@ -32,8 +32,8 @@ const signupRouter = express.Router();
  *               - username
  *               - email
  *               - password
- *               - firstName
- *               - lastName
+ *               - first_name
+ *               - last_name
  *             properties:
  *               email:
  *                 type: string
@@ -44,10 +44,10 @@ const signupRouter = express.Router();
  *               password:
  *                 type: string
  *                 description: Password
- *               firstName:
+ *               first_name:
  *                 type: string
  *                 description: User's first name
- *               lastName:
+ *               last_name:
  *                 type: string
  *                 description: User's last name
  *     responses:
