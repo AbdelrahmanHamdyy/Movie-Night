@@ -54,3 +54,14 @@ export const emailValidator = [
     .isEmail()
     .withMessage("Email must be a valid email"),
 ];
+
+export const verifyEmailValidator = [
+  param("id")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("User id can't be empty")
+    .isNumeric()
+    .withMessage("User id must be a number"),
+  param("token").trim().not().isEmpty().withMessage("Token can not be empty"),
+];
