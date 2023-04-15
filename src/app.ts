@@ -34,7 +34,7 @@ const options = {
       description: "API-Documentation",
     },
   },
-  apis: ["./routes/*.ts"],
+  apis: ["./src/routes/*.ts"],
 };
 const specs = swaggerJsDoc(options);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
