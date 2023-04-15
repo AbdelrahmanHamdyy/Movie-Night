@@ -5,6 +5,7 @@ import {
   signupValidator,
   emailValidator,
   usernameValidator,
+  verifyEmailValidator,
 } from "../validators/signupValidators";
 
 const signupRouter = express.Router();
@@ -191,7 +192,12 @@ signupRouter.get(
  *       500:
  *         description: Internal server error
  */
-signupRouter.post("/verify-email/:id/:token");
+signupRouter.post(
+  "/verify-email/:id/:token",
+  verifyEmailValidator,
+  validateRequestSchema,
+  signupController.verifyEmail
+);
 
 /**
  * @swagger
