@@ -1,7 +1,10 @@
 import express from "express";
 import { validateRequestSchema } from "../middlewares/validationResult";
 import loginController from "../controllers/loginController";
-import { loginValidator } from "../validators/loginValidators";
+import {
+  forgetPasswordValidator,
+  loginValidator,
+} from "../validators/loginValidators";
 
 const loginRouter = express.Router();
 
@@ -101,7 +104,12 @@ loginRouter.post(
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/login/forget-password");
+loginRouter.post(
+  "/login/forget-password",
+  forgetPasswordValidator,
+  validateRequestSchema,
+  loginController.forgetPassword
+);
 
 /**
  * @swagger
