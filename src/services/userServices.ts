@@ -1,5 +1,5 @@
 import { generateJWT, generateVerifyToken } from "../utils/generateTokens";
-import { sendVerifyEmail } from "../utils/emails";
+import { sendResetPasswordEmail, sendVerifyEmail } from "../utils/emails";
 import { User, UserData } from "../models/User";
 import { Token } from "../models/Token";
 import ReqError from "../utils/error";
@@ -15,7 +15,7 @@ type responseObject = {
 /**
  * This function generates a verification token of type "verifyEmail" and
  * then sends a verification email to the user which contains the created token.
- * If the email was send successfully then a reponse is sent back to the user containins
+ * If the email was sent successfully then a reponse is sent back to the user containing
  * the status code and a JWT token for authentication
  *
  * @param {Object} user User object
@@ -45,6 +45,25 @@ export async function verifyUser(user: UserData): Promise<responseObject> {
 }
 
 /**
+ * This function generates a verification token of type "resetPassword" and
+ * then sends a reset password email to the user which contains the created token.
+ * If the email wasn't sent successfully then an error is thrown & caught in the controller
+ *
+ * @param {Object} user User object
+ * @returns {void}
+ */
+export async function forgetPasswordEmail(user: UserData): Promise<void> {
+  const token = await generateVerifyToken(user.id as number, "resetPassword");
+  const emailSent = sendResetPasswordEmail(user, token);
+
+  if (!emailSent) {
+    const error = new ReqError("Failed to send Reset Password email");
+    error.statusCode = 400;
+    throw error;
+  }
+}
+
+/**
  * This function takes a user id and checks if it's found in the database
  * or may have been deleted, then throws an error with a proper message
  *
@@ -54,7 +73,7 @@ export async function verifyUser(user: UserData): Promise<responseObject> {
 export async function checkUserById(id: number): Promise<UserData> {
   const user = await userModel.getUserById(id);
   if (!user) {
-    const error = new ReqError("User not found");
+    const error = new ReqError("Incorrect ID");
     error.statusCode = 400;
     throw error;
   }
@@ -71,7 +90,29 @@ export async function checkUserById(id: number): Promise<UserData> {
 export async function checkUserByUsername(username: string): Promise<UserData> {
   const user = await userModel.getUserByUsername(username);
   if (!user) {
-    const error = new ReqError("User not found");
+    const error = new ReqError("Incorrect Username");
+    error.statusCode = 400;
+    throw error;
+  }
+  return user;
+}
+
+/**
+ * This function checks if there exists a user with the given username and
+ * then checks that the email given is the same as that of the user. If not,
+ * then an error is thrown with an incorrect email message
+ *
+ * @param {string} username Username
+ * @param {string} email Email
+ * @returns {UserData} The user object found
+ */
+export async function verifyUsernameAndEmail(
+  username: string,
+  email: string
+): Promise<UserData> {
+  const user = await checkUserByUsername(username);
+  if (user.email !== email) {
+    const error = new ReqError("Incorrect Email");
     error.statusCode = 400;
     throw error;
   }
