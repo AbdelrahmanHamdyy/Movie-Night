@@ -151,15 +151,19 @@ export class User {
     }
   }
 
-  async authenticate(user: UserData): Promise<UserData | null> {
+  async authenticate(
+    username: string,
+    password: string
+  ): Promise<UserData | null> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE id=$1";
+      const sql =
+        "SELECT * FROM users WHERE username=$1 AND deleted_at is NULL";
 
-      const result = await client.query(sql, [user.id]);
+      const result = await client.query(sql, [username]);
       if (result.rows.length) {
         const authUser = result.rows[0];
-        if (bcrypt.compareSync(user.password + PEPPER, authUser.password)) {
+        if (bcrypt.compareSync(password + PEPPER, authUser.password)) {
           return authUser;
         }
       }
@@ -168,7 +172,7 @@ export class User {
       return null;
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to authenticate user ${user.first_name}`);
+      throw new Error(`Failed to authenticate user ${username}`);
     }
   }
 }

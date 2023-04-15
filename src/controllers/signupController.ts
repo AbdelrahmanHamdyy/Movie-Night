@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { User, UserData } from "../models/User";
 import {
   verifyUser,
-  checkUser,
-  checkVerificationToken,
+  verifyTokenAndUpdate,
+  checkUserById,
 } from "../services/userServices";
 
 const user = new User();
@@ -63,8 +63,8 @@ const verifyEmail = async (req: Request, res: Response) => {
     const id = req.params.id as unknown as number;
     const token = req.params.token as string;
 
-    const checkedUser = await checkUser(id);
-    await checkVerificationToken(checkedUser, token);
+    const checkedUser = await checkUserById(id);
+    await verifyTokenAndUpdate(checkedUser, token, "verifyEmail");
 
     return res.status(200).json("Email has been verified successfully!");
   } catch (error: any) {

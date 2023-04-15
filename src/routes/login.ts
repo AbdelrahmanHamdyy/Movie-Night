@@ -1,6 +1,12 @@
 import express from "express";
 import { validateRequestSchema } from "../middlewares/validationResult";
 import loginController from "../controllers/loginController";
+import {
+  forgetPasswordValidator,
+  forgetUsernameValidator,
+  loginValidator,
+  resetPasswordValidator,
+} from "../validators/loginValidators";
 
 const loginRouter = express.Router();
 
@@ -57,7 +63,12 @@ const loginRouter = express.Router();
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/login");
+loginRouter.post(
+  "/login",
+  loginValidator,
+  validateRequestSchema,
+  loginController.login
+);
 
 /**
  * @swagger
@@ -95,7 +106,12 @@ loginRouter.post("/login");
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/login/forget-password");
+loginRouter.post(
+  "/login/forget-password",
+  forgetPasswordValidator,
+  validateRequestSchema,
+  loginController.forgetPassword
+);
 
 /**
  * @swagger
@@ -148,7 +164,12 @@ loginRouter.post("/login/forget-password");
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/reset-password/:id/:token");
+loginRouter.post(
+  "/reset-password/:id/:token",
+  resetPasswordValidator,
+  validateRequestSchema,
+  loginController.resetPassword
+);
 
 /**
  * @swagger
@@ -182,6 +203,11 @@ loginRouter.post("/reset-password/:id/:token");
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/login/forget-username");
+loginRouter.post(
+  "/login/forget-username",
+  forgetUsernameValidator,
+  validateRequestSchema,
+  loginController.forgetUsername
+);
 
 export default loginRouter;
