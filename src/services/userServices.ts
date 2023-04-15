@@ -51,10 +51,49 @@ export async function verifyUser(user: UserData): Promise<responseObject> {
  * @param {number} id User ID
  * @returns {UserData} The user object found
  */
-export async function checkUser(id: number): Promise<UserData> {
+export async function checkUserById(id: number): Promise<UserData> {
   const user = await userModel.getUserById(id);
   if (!user) {
     const error = new ReqError("User not found");
+    error.statusCode = 400;
+    throw error;
+  }
+  return user;
+}
+
+/**
+ * This function takes a username and checks if it's found in the database
+ * and the user isn't deleted, then throws an error if not
+ *
+ * @param {string} username Username
+ * @returns {UserData} The user object found
+ */
+export async function checkUserByUsername(username: string): Promise<UserData> {
+  const user = await userModel.getUserByUsername(username);
+  if (!user) {
+    const error = new ReqError("User not found");
+    error.statusCode = 400;
+    throw error;
+  }
+  return user;
+}
+
+/**
+ * Calls the authenticate function of the user model to check for
+ * the username and password given and then throws an error if null
+ * was returned
+ *
+ * @param {string} username Username
+ * @param {string} password Password
+ * @returns {UserData} The user object returned after authenticating
+ */
+export async function authenticateUser(
+  username: string,
+  password: string
+): Promise<UserData> {
+  const user = await userModel.authenticate(username, password);
+  if (!user) {
+    const error = new ReqError("Authentication Failed");
     error.statusCode = 400;
     throw error;
   }
