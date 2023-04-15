@@ -14,5 +14,6 @@
     "database": { "ENV": "DB_NAME_TESTING" },
     "user": { "ENV": "DB_USERNAME" },
     "password": { "ENV": "DB_PASSWORD" }
-  }
+  },
+  "sql-file": true
 }
