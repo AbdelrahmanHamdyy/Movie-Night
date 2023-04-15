@@ -3,7 +3,7 @@ import client from "../database";
 export type TokenData = {
   userId: number;
   token: string;
-  expireAt?: Date;
+  expire_at?: Date;
   type: string;
 };
 
@@ -38,7 +38,7 @@ export class Token {
       const verifyToken = result.rows[0];
       if (
         verifyToken?.userid === userId &&
-        verifyToken?.expireat > Date.now()
+        verifyToken?.expire_at > Date.now()
       ) {
         return true;
       }
