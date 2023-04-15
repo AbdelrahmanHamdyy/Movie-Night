@@ -58,3 +58,25 @@ export function sendResetPasswordEmail(user: UserData, token: string): boolean {
     return false;
   }
 }
+
+/**
+ * This function sends a forget username email that will simply
+ * remind the user what his username is
+ *
+ * @param {UserData} user User object
+ * @returns {boolean} True if the email was sent successfully and false if any error occured
+ */
+export function sendForgetUsernameEmail(user: UserData): boolean {
+  try {
+    transporter.sendMail({
+      to: user.email,
+      from: SENDER_EMAIL,
+      subject: "Movie Night - Forget Username Email",
+      html: `<h1>Your username is ${user.username}</h1>`,
+    });
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}

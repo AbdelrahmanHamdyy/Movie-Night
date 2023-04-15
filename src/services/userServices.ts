@@ -1,5 +1,9 @@
 import { generateJWT, generateVerifyToken } from "../utils/generateTokens";
-import { sendResetPasswordEmail, sendVerifyEmail } from "../utils/emails";
+import {
+  sendForgetUsernameEmail,
+  sendResetPasswordEmail,
+  sendVerifyEmail,
+} from "../utils/emails";
 import { User, UserData } from "../models/User";
 import { Token } from "../models/Token";
 import ReqError from "../utils/error";
@@ -68,6 +72,24 @@ export async function forgetPasswordEmail(user: UserData): Promise<void> {
 }
 
 /**
+ * This function sends a forget username email to the user by calling the
+ * utility function and checking its return value to know if the email was successfully
+ * send without any errors or not
+ *
+ * @param {Object} user User object
+ * @returns {void}
+ */
+export function forgetUsernameEmail(user: UserData): void {
+  const emailSent = sendForgetUsernameEmail(user);
+
+  if (!emailSent) {
+    const error = new ReqError("Failed to send Forget Username email");
+    error.statusCode = 400;
+    throw error;
+  }
+}
+
+/**
  * This function takes a user id and checks if it's found in the database
  * or may have been deleted, then throws an error with a proper message
  *
@@ -95,6 +117,23 @@ export async function checkUserByUsername(username: string): Promise<UserData> {
   const user = await userModel.getUserByUsername(username);
   if (!user) {
     const error = new ReqError("Incorrect Username");
+    error.statusCode = 400;
+    throw error;
+  }
+  return user;
+}
+
+/**
+ * This function takes an email the associated user is found in the
+ * database, then throws an error if not
+ *
+ * @param {string} email Email
+ * @returns {UserData} The user object found
+ */
+export async function checkUserByEmail(email: string): Promise<UserData> {
+  const user = await userModel.getUserByEmail(email);
+  if (!user) {
+    const error = new ReqError("Incorrect Email");
     error.statusCode = 400;
     throw error;
   }

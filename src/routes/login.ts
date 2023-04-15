@@ -3,6 +3,7 @@ import { validateRequestSchema } from "../middlewares/validationResult";
 import loginController from "../controllers/loginController";
 import {
   forgetPasswordValidator,
+  forgetUsernameValidator,
   loginValidator,
   resetPasswordValidator,
 } from "../validators/loginValidators";
@@ -202,6 +203,11 @@ loginRouter.post(
  *       500:
  *         description: Internal server error
  */
-loginRouter.post("/login/forget-username");
+loginRouter.post(
+  "/login/forget-username",
+  forgetUsernameValidator,
+  validateRequestSchema,
+  loginController.forgetUsername
+);
 
 export default loginRouter;

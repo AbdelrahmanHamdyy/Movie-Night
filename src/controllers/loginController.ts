@@ -6,6 +6,8 @@ import {
   verifyTokenAndUpdate,
   forgetPasswordEmail,
   verifyUsernameAndEmail,
+  checkUserByEmail,
+  forgetUsernameEmail,
 } from "../services/userServices";
 import { generateJWT } from "../utils/generateTokens";
 
@@ -76,8 +78,26 @@ const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
+const forgetUsername = async (req: Request, res: Response) => {
+  try {
+    const email = req.body.email as string;
+    const user = await checkUserByEmail(email);
+    forgetUsernameEmail(user);
+    return res.status(200).json("Forget Username Email sent successfully");
+  } catch (error: any) {
+    if (error.statusCode === 400) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else if (error.statusCode) {
+      res.status(error.statusCode).json(error.message);
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 export default {
   login,
   forgetPassword,
   resetPassword,
+  forgetUsername,
 };
