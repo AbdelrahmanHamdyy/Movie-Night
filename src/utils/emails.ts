@@ -35,3 +35,26 @@ export function sendVerifyEmail(user: UserData, token: string): boolean {
     return false;
   }
 }
+
+/**
+ * This function sends a reset password email that will enable him
+ * to enter new password when clicking on the link with the correct token
+ *
+ * @param {UserData} user User object
+ * @param {string} token Verification token that will be used to reset the user's password
+ * @returns {boolean} True if the email was sent successfully and false if any error occured
+ */
+export function sendResetPasswordEmail(user: UserData, token: string): boolean {
+  try {
+    transporter.sendMail({
+      to: user.email,
+      from: SENDER_EMAIL,
+      subject: "Movie Night - Reset Password Email",
+      html: `<h1>Click <a href="${BASE}/reset-password/${user.id}/${token}">here</a> to reset your password</h1>`,
+    });
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}
