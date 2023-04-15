@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { User, UserData } from "../models/User";
-import { verifyUser } from "../services/userServices";
+import {
+  verifyUser,
+  checkUser,
+  checkVerificationToken,
+} from "../services/userServices";
 
 const user = new User();
 
@@ -8,8 +12,8 @@ const signup = async (req: Request, res: Response) => {
   try {
     const userObj: UserData = {
       username: req.body.username,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      firstname: req.body.firstName,
+      lastname: req.body.lastName,
       email: req.body.email,
       password: req.body.password,
     };
@@ -54,8 +58,29 @@ const emailAvailable = async (req: Request, res: Response) => {
   }
 };
 
+const verifyEmail = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id as unknown as number;
+    const token = req.params.token as string;
+
+    const checkedUser = await checkUser(id);
+    await checkVerificationToken(checkedUser, token);
+
+    return res.status(200).json("Email has been verified successfully!");
+  } catch (error: any) {
+    if (error.statusCode === 400) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else if (error.statusCode) {
+      res.status(error.statusCode).json(error.message);
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 export default {
   signup,
+  verifyEmail,
   usernameAvailable,
   emailAvailable,
 };
