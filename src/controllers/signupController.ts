@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { User, UserData } from "../models/User";
 import {
   verifyUser,
-  checkUser,
   checkVerificationToken,
+  checkUserById,
 } from "../services/userServices";
 
 const user = new User();
@@ -63,7 +63,7 @@ const verifyEmail = async (req: Request, res: Response) => {
     const id = req.params.id as unknown as number;
     const token = req.params.token as string;
 
-    const checkedUser = await checkUser(id);
+    const checkedUser = await checkUserById(id);
     await checkVerificationToken(checkedUser, token);
 
     return res.status(200).json("Email has been verified successfully!");
