@@ -159,8 +159,15 @@ loginRouter.post(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       403:
- *         description: Invalid token
+ *       409:
+ *         description: Invalid Token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
  *       500:
  *         description: Internal server error
  */

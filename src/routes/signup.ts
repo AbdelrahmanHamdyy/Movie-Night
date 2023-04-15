@@ -108,7 +108,14 @@ signupRouter.post(
  *                   type: string
  *                   description: Type of error
  *       409:
- *         description: Username already taken
+ *         description: Username is already taken
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
  *       500:
  *         description: Internal server error
  */
@@ -145,7 +152,14 @@ signupRouter.get(
  *                   type: string
  *                   description: Type of error
  *       409:
- *         description: Email already taken
+ *         description: Email is already taken
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
  *       500:
  *         description: Internal server error
  */
@@ -187,8 +201,15 @@ signupRouter.get(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       403:
- *         description: Invalid token
+ *       409:
+ *         description: Invalid Token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
  *       500:
  *         description: Internal server error
  */

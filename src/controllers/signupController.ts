@@ -68,10 +68,8 @@ const verifyEmail = async (req: Request, res: Response) => {
 
     return res.status(200).json("Email has been verified successfully!");
   } catch (error: any) {
-    if (error.statusCode === 400) {
+    if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
-    } else if (error.statusCode) {
-      res.status(error.statusCode).json(error.message);
     } else {
       res.status(500).json("Internal server error");
     }
