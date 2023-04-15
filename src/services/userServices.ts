@@ -27,7 +27,7 @@ type responseObject = {
  * the status code and a JWT token for authentication
  *
  * @param {Object} user User object
- * @returns {Object} Response to the request containing [statusCode, body]
+ * @returns {responseObject} Response to the request containing [statusCode, body]
  */
 export async function verifyUser(user: UserData): Promise<responseObject> {
   const token = await generateVerifyToken(user.id as number, "verifyEmail");

@@ -105,5 +105,14 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
+  },
+  "typedocOptions": {
+    "entryPoints": [
+      "src/utils/*.ts",
+      "src/services/*.ts",
+      "src/middlewares/*.ts",
+      "src/*.ts"
+    ],
+    "out": "docs"
   }
 }

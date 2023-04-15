@@ -5,7 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "start": "set NODE_ENV=development && nodemon src/app.ts",
-    "jsdoc": "jsdoc -c jsdoc.json",
+    "typedoc": "npx typedoc --out docs",
     "test": "set NODE_ENV=testing && node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
   },
   "author": "Abdelrahman",
@@ -25,7 +25,8 @@
     "pg": "^8.10.0",
     "swagger": "^0.7.5",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.2"
+    "swagger-ui-express": "^4.6.2",
+    "typedoc": "^0.24.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
