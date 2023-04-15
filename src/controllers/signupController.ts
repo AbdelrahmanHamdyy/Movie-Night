@@ -64,7 +64,7 @@ const verifyEmail = async (req: Request, res: Response) => {
     const token = req.params.token as string;
 
     const checkedUser = await checkUserById(id);
-    await checkVerificationToken(checkedUser, token);
+    await checkVerificationToken(checkedUser, token, "verifyEmail");
 
     return res.status(200).json("Email has been verified successfully!");
   } catch (error: any) {
