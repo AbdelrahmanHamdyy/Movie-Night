@@ -1,3 +1,5 @@
+CREATE TYPE GENDER AS ENUM ('Male', 'Female');
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY NOT NULL,
     first_name VARCHAR(255) NOT NULL,
@@ -5,7 +7,7 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    gender ENUM('Male', 'Female') DEFAULT 'Male',
+    gender GENDER,
     country VARCHAR(255),
     avatar VARCHAR(255),
     is_admin BOOLEAN DEFAULT FALSE,
