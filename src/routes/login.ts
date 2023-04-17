@@ -19,6 +19,16 @@ const loginRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+/**
+ * @swagger
  * /login:
  *   post:
  *     summary: Log in to the website
