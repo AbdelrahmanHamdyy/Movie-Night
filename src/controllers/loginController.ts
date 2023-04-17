@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { User, UserData } from "../models/User";
 import {
   authenticateUser,
   checkUserById,
