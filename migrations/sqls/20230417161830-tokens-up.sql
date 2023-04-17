@@ -1,6 +1,8 @@
+CREATE TYPE TOKEN_TYPE AS ENUM ('verifyEmail', 'resetPassword');
+
 CREATE TABLE tokens (
     user_id INT NOT NULL REFERENCES users(id),
     token VARCHAR(255) NOT NULL PRIMARY KEY,
     expire_at TIMESTAMP DEFAULT (NOW() + '1 day'::interval),
-    type ENUM('verifyEmail', 'resetPassword') NOT NULL,
+    type TOKEN_TYPE NOT NULL
 );
