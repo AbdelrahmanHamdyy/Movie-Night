@@ -1,4 +1,6 @@
 import { generateJWT, generateVerifyToken } from "../utils/generateTokens";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import { Request } from "express";
 import {
   sendForgetUsernameEmail,
   sendResetPasswordEmail,
@@ -11,6 +13,7 @@ import bcrypt from "bcrypt";
 
 const PEPPER = process.env.BCRYPT_PASSWORD;
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
 
 const userModel = new User();
 const verifyToken = new Token();
@@ -249,4 +252,30 @@ export async function changePassword(
 
   user.password = hash;
   await userModel.update(user);
+}
+
+/**
+ * This function checks for the authorization of a request
+ * and extracts the token from the body for verification with the help of jwt. If
+ * a token wasn't found then it returns null
+ *
+ * @param {Request} req The request made
+ * @returns {JwtPayload | null} Returns the decoded payload of the token
+ * containing the userId and username, else null
+ */
+export default function checkJwtToken(req: Request): JwtPayload | null {
+  const authorizationHeader = req.headers?.authorization;
+  const token = authorizationHeader?.split(" ")[1];
+  if (!token) {
+    return null;
+  }
+  try {
+    const decodedPayload = jwt.verify(
+      token,
+      TOKEN_SECRET as Secret
+    ) as JwtPayload;
+    return decodedPayload;
+  } catch (err) {
+    return null;
+  }
 }
