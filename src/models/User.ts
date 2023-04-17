@@ -51,9 +51,9 @@ export class User {
   async index(): Promise<UserData[]> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM users WHERE deleted_at=$1;";
+      const sql = "SELECT * FROM users WHERE deleted_at is NULL;";
 
-      const users = await conn.query(sql, [null]);
+      const users = await conn.query(sql);
       conn.release();
 
       return users.rows;
@@ -141,7 +141,7 @@ export class User {
       const conn = await client.connect();
       const sql = "UPDATE users SET deleted_at=$1 WHERE id=$2;";
 
-      const result = await client.query(sql, [Date.now(), id]);
+      const result = await conn.query(sql, [Date.now(), id]);
       conn.release();
 
       return result.rows[0];
@@ -160,7 +160,7 @@ export class User {
       const sql =
         "SELECT * FROM users WHERE username=$1 AND deleted_at is NULL";
 
-      const result = await client.query(sql, [username]);
+      const result = await conn.query(sql, [username]);
       if (result.rows.length) {
         const authUser = result.rows[0];
         if (bcrypt.compareSync(password + PEPPER, authUser.password)) {
