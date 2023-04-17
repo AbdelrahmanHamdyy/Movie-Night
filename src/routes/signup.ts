@@ -201,7 +201,7 @@ signupRouter.get(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       403:
  *         description: Invalid Token
  *         content:
  *           application/json:
