@@ -4,6 +4,6 @@ CREATE TABLE user_ratings (
     rate INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP
-    CONSTRAINT PK PRIMARY KEY (user_id, movie_id)
+    deleted_at TIMESTAMP,
+    CONSTRAINT RATINGS_PK PRIMARY KEY (user_id, movie_id)
 );

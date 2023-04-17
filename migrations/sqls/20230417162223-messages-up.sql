@@ -8,5 +8,5 @@ CREATE TABLE messages (
     is_reply BOOLEAN DEFAULT FALSE,
     replied_msg_id INT REFERENCES messages(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP,
+    deleted_at TIMESTAMP
 );

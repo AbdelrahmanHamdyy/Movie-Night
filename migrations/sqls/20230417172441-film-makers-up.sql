@@ -4,7 +4,7 @@ CREATE TABLE film_makers (
     last_name VARCHAR(255) NOT NULL,
     about VARCHAR(255) NOT NULL,
     country VARCHAR(255) NOT NULL,
-    gender ENUM('Male', 'Female') DEFAULT 'Male',
+    gender GENDER,
     avatar TEXT,
     birthday DATE NOT NULL,
     is_writer BOOLEAN DEFAULT FALSE,
