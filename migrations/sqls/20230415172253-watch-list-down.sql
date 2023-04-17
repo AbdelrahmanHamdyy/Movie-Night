@@ -1,1 +1,0 @@
-Drop TABLE watch_list;

@@ -1,1 +1,0 @@
-DROP TABLE movie_writers;

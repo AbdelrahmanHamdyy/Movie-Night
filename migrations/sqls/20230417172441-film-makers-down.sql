@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS film_makers CASCADE;
