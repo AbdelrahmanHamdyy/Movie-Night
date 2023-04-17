@@ -1,5 +1,3 @@
-CREATE TYPE GENDER AS ENUM ('Male', 'Female');
-
 CREATE TABLE users (
     id SERIAL PRIMARY KEY NOT NULL,
     first_name VARCHAR(255) NOT NULL,

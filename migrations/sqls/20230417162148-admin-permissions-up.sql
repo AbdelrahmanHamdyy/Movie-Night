@@ -1,5 +1,3 @@
-CREATE TYPE PERMISSION AS ENUM ('CREATE', 'UPDATE', 'DELETE');
-
 CREATE TABLE admin_permissions (
     admin_id INT NOT NULL REFERENCES users(id),
     permission PERMISSION NOT NULL,

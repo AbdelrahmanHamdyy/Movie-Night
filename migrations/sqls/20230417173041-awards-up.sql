@@ -1,5 +1,3 @@
-CREATE TYPE AWARD_TYPE AS ENUM ('bronze', 'silver', 'gold', 'platinum');
-
 CREATE TABLE awards (
     movie_id INT NOT NULL REFERENCES movies(id),
     award_type AWARD_TYPE NOT NULL DEFAULT 'bronze',

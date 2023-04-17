@@ -14,5 +14,6 @@ CREATE TABLE movies (
     language VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP
+    deleted_at TIMESTAMP,
+    CHECK (rating <= 10 AND rating >= 0) -- CHECK Constraint
 );

@@ -1,5 +1,3 @@
-CREATE TYPE TOKEN_TYPE AS ENUM ('verifyEmail', 'resetPassword');
-
 CREATE TABLE tokens (
     user_id INT NOT NULL REFERENCES users(id),
     token VARCHAR(255) NOT NULL PRIMARY KEY,
