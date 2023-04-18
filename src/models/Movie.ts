@@ -18,6 +18,9 @@ export type MovieData = {
   director_id?: Date;
   producer_id?: Date;
   company_id?: Date | null;
+  created_at?: Date;
+  updated_at?: Date;
+  deleted_at?: Date | null;
 };
 
 export class Movie {
