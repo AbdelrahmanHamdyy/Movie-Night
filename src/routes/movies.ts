@@ -1,6 +1,9 @@
 import express from "express";
 import { validateRequestSchema } from "../middlewares/validationResult";
-import { movieIdValidator } from "../validators/movieValidators";
+import {
+  movieIdValidator,
+  createMovieValidator,
+} from "../validators/movieValidators";
 import { optionalToken } from "../middlewares/verifyToken";
 import moviesController from "../controllers/moviesController";
 
@@ -105,6 +108,93 @@ moviesRouter.get(
   movieIdValidator,
   validateRequestSchema,
   moviesController.getMovie
+);
+
+/**
+ * @swagger
+ * /movie:
+ *   post:
+ *     summary: Creates a new movie
+ *     tags: [Movies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/formdata:
+ *           schema:
+ *             required:
+ *               - title
+ *               - about
+ *               - directorId
+ *               - producerId
+ *               - companyId
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Movie Title
+ *               about:
+ *                 type: string
+ *                 description: Brief description of what the movie is about
+ *               photo:
+ *                 type: object
+ *                 description: Image file
+ *               budget:
+ *                 type: number
+ *                 format: double
+ *                 description: Estimated budget for this movie
+ *               releaseDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The date in which the movie is expected to be released
+ *               language:
+ *                 type: string
+ *                 description: The main language used in the movie
+ *               directorId:
+ *                 type: number
+ *                 description: Movie director ID
+ *               producerId:
+ *                 type: number
+ *                 description: Movie producer ID
+ *               companyId:
+ *                 type: number
+ *                 description: Production Company ID
+ *     responses:
+ *       200:
+ *         description: Movie created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                  id:
+ *                     type: number
+ *                     description: ID of the newly created movie
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       409:
+ *         description: Unauthorized to add a new movie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.post(
+  "/movie/:id",
+  createMovieValidator,
+  validateRequestSchema,
+  moviesController.createMovie
 );
 
 export default moviesRouter;

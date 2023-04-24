@@ -19,7 +19,7 @@ const verifyToken = new Token();
 export function generateJWT(user: UserData): string {
   try {
     const token = jwt.sign(
-      { user_id: user.id, username: user.username },
+      { userId: user.id, username: user.username },
       TOKEN_SECRET
     );
 
