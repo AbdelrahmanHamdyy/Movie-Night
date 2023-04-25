@@ -1,0 +1,1 @@
+DROP TABLE movie_images;
