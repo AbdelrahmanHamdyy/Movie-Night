@@ -1,9 +1,12 @@
 import express from "express";
 import { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
+import multer from "multer";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import dotenv from "dotenv";
+import path from "path";
+import { fileStorage, fileFilter } from "./utils/files.js";
 import mainRouter from "./routes/router";
 
 const port = process.env.PORT || 3000;
@@ -38,6 +41,17 @@ const options = {
 };
 const specs = swaggerJsDoc(options);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+
+app.use(
+  multer({ storage: fileStorage, fileFilter: fileFilter }).fields([
+    { name: "cover", maxCount: 1 },
+    { name: "images", maxCount: 100 },
+    { name: "trailer", maxCount: 1 },
+    { name: "videos", maxCount: 100 },
+  ])
+);
+app.use("/images", express.static(path.join(__dirname, "uploads/images")));
+app.use("/videos", express.static(path.join(__dirname, "uploads/videos")));
 
 app.use(mainRouter);
 
