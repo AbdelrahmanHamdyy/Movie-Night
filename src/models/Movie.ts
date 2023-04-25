@@ -1,15 +1,12 @@
 import client from "../database";
-import bcrypt from "bcrypt";
-
-const PEPPER = process.env.BCRYPT_PASSWORD;
-const SALT_ROUNDS = process.env.SALT_ROUNDS;
 
 export type MovieData = {
   id?: number;
   title: string;
   about: string;
-  photo: string;
   language: string;
+  country: string;
+  duration: number;
   trailer?: string;
   score?: number;
   rating?: number;
@@ -24,16 +21,15 @@ export type MovieData = {
 };
 
 export class Movie {
-  async create(movie: MovieData): Promise<MovieData> {
+  async create(movie: MovieData): Promise<number> {
     try {
       const conn = await client.connect();
       const sql =
-        "INSERT INTO movies(title, about, photo, language, trailer, score, rating, budget, release_date, director_id, producer_id, company_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);";
+        "INSERT INTO movies(title, about, language, trailer, score, rating, budget, release_date, director_id, producer_id, company_id) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);";
 
       const result = await conn.query(sql, [
         movie.title,
         movie.about,
-        movie.photo,
         movie.language,
         movie.trailer,
         movie.score,
@@ -46,7 +42,7 @@ export class Movie {
       ]);
       conn.release();
 
-      return result.rows[0];
+      return result.rows[0].id;
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to create movie ${movie.title}!`);
@@ -87,12 +83,11 @@ export class Movie {
     try {
       const conn = await client.connect();
       const sql =
-        "UPDATE movies SET title=$1, about=$2, photo=$3, language=$4, trailer=$5, score=$6, rating=$7, budget=$8, release_date=$9, director_id=$10, producer_id=$11, company_id=$12 WHERE id=$13;";
+        "UPDATE movies SET title=$1, about=$2, language=$3, trailer=$4, score=$5, rating=$6, budget=$7, release_date=$8, director_id=$9, producer_id=$10, company_id=$11 WHERE id=$12;";
 
       const result = await conn.query(sql, [
         movie.title,
         movie.about,
-        movie.photo,
         movie.language,
         movie.trailer,
         movie.score,
