@@ -279,3 +279,18 @@ export default function checkJwtToken(req: Request): JwtPayload | null {
     return null;
   }
 }
+
+/**
+ * Checks whether the user given his ID is an admin or not.
+ *
+ * @param {Number} userId User ID
+ * @returns {void}
+ */
+export async function checkAdmin(userId: number): Promise<void> {
+  const user = await userModel.getUserById(userId);
+  if (!user || !user.is_admin) {
+    const error = new ReqError("This user is not an admin!");
+    error.statusCode = 403;
+    throw error;
+  }
+}
