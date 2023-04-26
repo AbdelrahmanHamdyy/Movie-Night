@@ -50,7 +50,7 @@ export async function getMovieDetails(
       rated = true;
     }
   }
-  console.log(movie);
+
   return {
     ...movie,
     inWatchlist,
@@ -142,7 +142,13 @@ export async function checkMovieById(id: number): Promise<MovieData> {
  * @returns {void}
  */
 export async function addGenres(id: number, genres: string[]): Promise<void> {
-  for (let genreName in genres) {
+  for (let genreName of genres) {
+    const genreExists = await movieGenre.getMovieGenre(id, genreName);
+    if (genreExists) {
+      const error = new ReqError(`Genre ${genreName} already exists`);
+      error.statusCode = 400;
+      throw error;
+    }
     const genre = await movieGenre.getGenreByName(genreName);
     if (!genre) {
       const error = new ReqError(`Incorrect Genre Name ${genreName}`);
