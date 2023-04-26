@@ -76,4 +76,23 @@ export class Genre {
       throw new Error(`Failed to add genre ${genreName} for movie ${movieId}`);
     }
   }
+
+  async getMovieGenre(
+    movieId: number,
+    genreName: string
+  ): Promise<MovieGenreData> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "SELECT FROM movie_genres WHERE movie_id=$1 AND genre_name=$2";
+
+      const result = await conn.query(sql, [movieId, genreName]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to get genre ${genreName} for movie ${movieId}`);
+    }
+  }
 }
