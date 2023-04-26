@@ -140,7 +140,7 @@ moviesRouter.get(
  *                 description: Brief description of what the movie is about
  *               duration:
  *                 type: number
- *                 description: Movie duration (Example: 142 means 1 hour 42 minutes)
+ *                 description: Movie duration (Example - 142 means 1 hour 42 minutes)
  *               budget:
  *                 type: number
  *                 format: double

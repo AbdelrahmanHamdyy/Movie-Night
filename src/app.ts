@@ -6,7 +6,7 @@ import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import dotenv from "dotenv";
 import path from "path";
-import { fileStorage, fileFilter } from "./utils/files.js";
+import { fileStorage, fileFilter } from "./utils/files";
 import mainRouter from "./routes/router";
 
 const port = process.env.PORT || 3000;
