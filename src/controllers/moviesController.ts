@@ -1,8 +1,13 @@
 import { Request, Response } from "express";
 import { Watchlist } from "../models/Watchlist";
-import { getMovieDetails } from "../services/movieServices";
-
-const watchlist = new Watchlist();
+import {
+  checkMovieMakers,
+  createNewMovie,
+  getMovieDetails,
+  checkMovieById,
+  addGenres,
+} from "../services/movieServices";
+import { checkAdmin } from "../services/userServices";
 
 const getMovie = async (req: Request, res: Response) => {
   try {
@@ -19,6 +24,40 @@ const getMovie = async (req: Request, res: Response) => {
   }
 };
 
+const createMovie = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    await checkAdmin(userId);
+    await checkMovieMakers(req.body);
+    const movieId = await createNewMovie(req.body);
+    res.status(200).json(movieId);
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
+const addMovieGenres = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    await checkAdmin(userId);
+    await checkMovieById(req.body.movieId);
+    await addGenres(req.body.movieId, req.body.genres);
+    res.status(200).json("Movie genres added successfully!");
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 export default {
   getMovie,
+  createMovie,
+  addMovieGenres,
 };

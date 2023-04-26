@@ -15,6 +15,8 @@ export type UserData = {
   country?: string;
   avatar?: string;
   verified_email?: boolean;
+  is_admin?: boolean;
+  is_owner?: boolean;
   created_at?: Date;
   updated_at?: Date;
   deleted_at?: Date | null;

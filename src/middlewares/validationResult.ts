@@ -23,7 +23,7 @@ export function validateRequestSchema(
       errors.push(result.array()[i].msg);
     }
 
-    return res.status(400).json({ error: errors });
+    return res.status(400).json({ errors });
   }
   next();
 }

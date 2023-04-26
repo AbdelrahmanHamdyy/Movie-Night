@@ -3,8 +3,9 @@ import { validateRequestSchema } from "../middlewares/validationResult";
 import {
   movieIdValidator,
   createMovieValidator,
+  movieGenresValidator,
 } from "../validators/movieValidators";
-import { optionalToken } from "../middlewares/verifyToken";
+import { optionalToken, verifyAuthToken } from "../middlewares/verifyToken";
 import moviesController from "../controllers/moviesController";
 
 const moviesRouter = express.Router();
@@ -119,11 +120,14 @@ moviesRouter.get(
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/formdata:
+ *         application/json:
  *           schema:
  *             required:
  *               - title
  *               - about
+ *               - duration
+ *               - language
+ *               - country
  *               - directorId
  *               - producerId
  *               - companyId
@@ -134,9 +138,9 @@ moviesRouter.get(
  *               about:
  *                 type: string
  *                 description: Brief description of what the movie is about
- *               photo:
- *                 type: object
- *                 description: Image file
+ *               duration:
+ *                 type: number
+ *                 description: Movie duration (Example - 142 means 1 hour 42 minutes)
  *               budget:
  *                 type: number
  *                 format: double
@@ -148,6 +152,9 @@ moviesRouter.get(
  *               language:
  *                 type: string
  *                 description: The main language used in the movie
+ *               country:
+ *                 type: string
+ *                 description: The country where the movie originated from
  *               directorId:
  *                 type: number
  *                 description: Movie director ID
@@ -191,10 +198,68 @@ moviesRouter.get(
  *          - bearerAuth: []
  */
 moviesRouter.post(
-  "/movie/:id",
+  "/movie",
+  verifyAuthToken,
   createMovieValidator,
   validateRequestSchema,
   moviesController.createMovie
+);
+
+/**
+ * @swagger
+ * /movie-genres:
+ *   post:
+ *     summary: Adds genres for a movie
+ *     tags: [Movies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - movieId
+ *               - genres
+ *             properties:
+ *               movieId:
+ *                 type: number
+ *                 description: Movie ID
+ *               genres:
+ *                 type: array
+ *                 description: The genres associated with this movie
+ *                 items:
+ *                    type: string
+ *     responses:
+ *       200:
+ *         description: Movie genres added successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       409:
+ *         description: Unauthorized to add a new movie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.post(
+  "/movie-genres",
+  verifyAuthToken,
+  movieGenresValidator,
+  validateRequestSchema,
+  moviesController.addMovieGenres
 );
 
 export default moviesRouter;
