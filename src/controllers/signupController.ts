@@ -12,8 +12,8 @@ const signup = async (req: Request, res: Response) => {
   try {
     const userObj: UserData = {
       username: req.body.username,
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
+      first_name: req.body.firstName,
+      last_name: req.body.lastName,
       email: req.body.email,
       password: req.body.password,
     };
