@@ -50,8 +50,9 @@ export async function getMovieDetails(
       rated = true;
     }
   }
+  console.log(movie);
   return {
-    movie,
+    ...movie,
     inWatchlist,
     rated,
     rate,
