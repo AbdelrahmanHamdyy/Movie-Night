@@ -30,7 +30,7 @@ const createMovie = async (req: Request, res: Response) => {
     await checkAdmin(userId);
     await checkMovieMakers(req.body);
     const movieId = await createNewMovie(req.body);
-    res.status(200).json({ id: movieId });
+    res.status(200).json(movieId);
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
