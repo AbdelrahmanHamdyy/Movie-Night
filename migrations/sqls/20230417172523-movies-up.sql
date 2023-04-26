@@ -2,7 +2,7 @@ CREATE TABLE movies (
     id SERIAL PRIMARY KEY NOT NULL,
     title VARCHAR(255) NOT NULL,
     about TEXT NOT NULL,
-    cover_url VARCHAR(255) NOT NULL,
+    cover_url VARCHAR(255),
     trailer_url VARCHAR(255),
     score INT DEFAULT 0,
     rating INT DEFAULT 0,
