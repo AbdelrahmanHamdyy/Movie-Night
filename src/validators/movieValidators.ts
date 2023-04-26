@@ -56,7 +56,7 @@ export const createMovieValidator = [
 ];
 
 export const movieGenresValidator = [
-  body("id")
+  body("movieId")
     .trim()
     .not()
     .isEmpty()
@@ -64,10 +64,6 @@ export const movieGenresValidator = [
     .isNumeric()
     .withMessage("Movie ID must be a number"),
   body("genres")
-    .trim()
-    .not()
-    .isEmpty()
-    .withMessage("Genres array can't be empty")
     .isArray({ min: 1 })
     .withMessage("A movie must have atleast 1 genre"),
 ];
