@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
-import { Watchlist } from "../models/Watchlist";
+import { Watchlist } from "../models/Watchlist.ts";
 import {
   checkMovieMakers,
   createNewMovie,
   getMovieDetails,
   checkMovieById,
   addGenres,
-} from "../services/movieServices";
-import { checkAdmin } from "../services/userServices";
+  addCoverTrailer,
+} from "../services/movieServices.ts";
+import { checkAdmin } from "../services/userServices.ts";
 
 const getMovie = async (req: Request, res: Response) => {
   try {
@@ -56,8 +57,33 @@ const addMovieGenres = async (req: Request, res: Response) => {
   }
 };
 
+const addMovieCoverTrailer = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    const movieId = req.body.id;
+    const type = req.body.type;
+    await checkAdmin(userId);
+    const movie = await checkMovieById(movieId);
+    await addCoverTrailer(movie, type, req.files);
+    res
+      .status(200)
+      .json(
+        type == "cover"
+          ? "Movie cover added successfully!"
+          : "Movie trailer added successfully!"
+      );
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 export default {
   getMovie,
   createMovie,
   addMovieGenres,
+  addMovieCoverTrailer,
 };

@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import checkJwtToken from "../services/userServices";
+import checkJwtToken from "../services/userServices.ts";
 
 const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
 

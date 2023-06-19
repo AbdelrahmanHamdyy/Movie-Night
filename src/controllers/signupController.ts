@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { User, UserData } from "../models/User";
+import { User, UserData } from "../models/User.ts";
 import {
   verifyUser,
   verifyTokenAndUpdate,
   checkUserById,
-} from "../services/userServices";
+} from "../services/userServices.ts";
 
 const user = new User();
 

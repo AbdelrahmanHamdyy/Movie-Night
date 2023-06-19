@@ -1,12 +1,12 @@
 import express from "express";
-import { validateRequestSchema } from "../middlewares/validationResult";
-import signupController from "../controllers/signupController";
+import { validateRequestSchema } from "../middlewares/validationResult.ts";
+import signupController from "../controllers/signupController.ts";
 import {
   signupValidator,
   emailValidator,
   usernameValidator,
   verifyEmailValidator,
-} from "../validators/signupValidators";
+} from "../validators/signupValidators.ts";
 
 const signupRouter = express.Router();
 

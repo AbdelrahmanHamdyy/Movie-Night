@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import crypto, { verify } from "crypto";
-import { Token, TokenData } from "../models/Token";
-import { UserData } from "../models/User";
+import { Token, TokenData } from "../models/Token.ts";
+import { UserData } from "../models/User.ts";
 import dotenv from "dotenv";
 
 dotenv.config();

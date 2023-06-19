@@ -1,14 +1,14 @@
-import { generateJWT, generateVerifyToken } from "../utils/generateTokens";
+import { generateJWT, generateVerifyToken } from "../utils/generateTokens.ts";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { Request } from "express";
 import {
   sendForgetUsernameEmail,
   sendResetPasswordEmail,
   sendVerifyEmail,
-} from "../utils/emails";
-import { User, UserData } from "../models/User";
-import { Token } from "../models/Token";
-import ReqError from "../utils/error";
+} from "../utils/emails.ts";
+import { User, UserData } from "../models/User.ts";
+import { Token } from "../models/Token.ts";
+import ReqError from "../utils/error.ts";
 import bcrypt from "bcrypt";
 
 const PEPPER = process.env.BCRYPT_PASSWORD;

@@ -1,12 +1,13 @@
 import express from "express";
-import { validateRequestSchema } from "../middlewares/validationResult";
+import { validateRequestSchema } from "../middlewares/validationResult.ts";
 import {
   movieIdValidator,
   createMovieValidator,
   movieGenresValidator,
-} from "../validators/movieValidators";
-import { optionalToken, verifyAuthToken } from "../middlewares/verifyToken";
-import moviesController from "../controllers/moviesController";
+  movieCoverTrailerValidator,
+} from "../validators/movieValidators.ts";
+import { optionalToken, verifyAuthToken } from "../middlewares/verifyToken.ts";
+import moviesController from "../controllers/moviesController.ts";
 
 const moviesRouter = express.Router();
 
@@ -260,6 +261,70 @@ moviesRouter.post(
   movieGenresValidator,
   validateRequestSchema,
   moviesController.addMovieGenres
+);
+
+/**
+ * @swagger
+ * /cover-trailer:
+ *   post:
+ *     summary: Adds a cover for a given movie
+ *     tags: [Movies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             required:
+ *               - type
+ *               - file
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: number
+ *                 description: Movie ID
+ *               type:
+ *                 type: string
+ *                 enum:
+ *                   - cover
+ *                   - trailer
+ *               cover:
+ *                 type: object
+ *                 description: The cover image
+ *               trailer:
+ *                 type: object
+ *                 description: Trailer video file
+ *     responses:
+ *       200:
+ *         description: Movie cover added successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       409:
+ *         description: Unauthorized to add a new movie cover
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.post(
+  "/cover-trailer",
+  verifyAuthToken,
+  movieCoverTrailerValidator,
+  validateRequestSchema,
+  moviesController.addMovieCoverTrailer
 );
 
 export default moviesRouter;

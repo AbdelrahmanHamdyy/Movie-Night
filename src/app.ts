@@ -6,14 +6,18 @@ import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import dotenv from "dotenv";
 import path from "path";
-import { fileStorage, fileFilter } from "./utils/files";
-import mainRouter from "./routes/router";
+import { fileURLToPath } from "url";
+import { fileStorage, fileFilter } from "./utils/files.ts";
+import mainRouter from "./routes/router.ts";
 
 const port = process.env.PORT || 3000;
 
 dotenv.config();
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+export const __dirname = path.dirname(__filename);
 
 app.use(bodyParser.json());
 

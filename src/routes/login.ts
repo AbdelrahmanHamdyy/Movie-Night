@@ -1,12 +1,12 @@
 import express from "express";
-import { validateRequestSchema } from "../middlewares/validationResult";
-import loginController from "../controllers/loginController";
+import { validateRequestSchema } from "../middlewares/validationResult.ts";
+import loginController from "../controllers/loginController.ts";
 import {
   forgetPasswordValidator,
   forgetUsernameValidator,
   loginValidator,
   resetPasswordValidator,
-} from "../validators/loginValidators";
+} from "../validators/loginValidators.ts";
 
 const loginRouter = express.Router();
 

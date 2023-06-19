@@ -1,4 +1,4 @@
-import client from "../database";
+import client from "../database.ts";
 import bcrypt from "bcrypt";
 
 const PEPPER = process.env.BCRYPT_PASSWORD;

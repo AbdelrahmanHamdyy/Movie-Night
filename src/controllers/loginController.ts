@@ -7,8 +7,8 @@ import {
   verifyUsernameAndEmail,
   checkUserByEmail,
   forgetUsernameEmail,
-} from "../services/userServices";
-import { generateJWT } from "../utils/generateTokens";
+} from "../services/userServices.ts";
+import { generateJWT } from "../utils/generateTokens.ts";
 
 const login = async (req: Request, res: Response) => {
   try {

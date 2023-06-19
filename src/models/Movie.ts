@@ -1,4 +1,4 @@
-import client from "../database";
+import client from "../database.ts";
 
 export type MovieData = {
   id?: number;
@@ -83,7 +83,7 @@ export class Movie {
     try {
       const conn = await client.connect();
       const sql =
-        "UPDATE movies SET title=$1, about=$2, language=$3, trailer=$4, score=$5, rating=$6, budget=$7, release_date=$8, director_id=$9, producer_id=$10, company_id=$11 WHERE id=$12;";
+        "UPDATE movies SET title=$1, about=$2, language=$3, trailer_url=$4, score=$5, rating=$6, budget=$7, release_date=$8, director_id=$9, producer_id=$10, company_id=$11, cover_url=$12 WHERE id=$13;";
 
       const result = await conn.query(sql, [
         movie.title,
@@ -97,6 +97,7 @@ export class Movie {
         movie.director_id,
         movie.producer_id,
         movie.company_id,
+        movie.cover_url,
         movie.id,
       ]);
       conn.release();

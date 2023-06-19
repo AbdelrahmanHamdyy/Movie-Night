@@ -1,4 +1,4 @@
-import { body, param } from "express-validator";
+import { body, check, param } from "express-validator";
 
 export const movieIdValidator = [
   param("id")
@@ -66,4 +66,18 @@ export const movieGenresValidator = [
   body("genres")
     .isArray({ min: 1 })
     .withMessage("A movie must have atleast 1 genre"),
+];
+
+export const movieCoverTrailerValidator = [
+  body("id")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Movie ID can't be empty")
+    .isNumeric()
+    .withMessage("Movie ID must be a number"),
+  body("type").trim().not().isEmpty().withMessage("File type cannot be empty"),
+  check("type")
+    .isIn(["cover", "trailer"])
+    .withMessage("Type must be either cover or trailer only"),
 ];

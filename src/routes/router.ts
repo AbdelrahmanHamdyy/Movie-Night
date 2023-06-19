@@ -1,8 +1,8 @@
 import express from "express";
 import { Request, Response } from "express";
-import signupRouter from "./signup";
-import loginRouter from "./login";
-import moviesRouter from "./movies";
+import signupRouter from "./signup.ts";
+import loginRouter from "./login.ts";
+import moviesRouter from "./movies.ts";
 
 const mainRouter = express.Router();
 

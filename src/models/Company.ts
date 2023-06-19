@@ -1,4 +1,4 @@
-import client from "../database";
+import client from "../database.ts";
 
 export type CompanyData = {
   id?: number;
