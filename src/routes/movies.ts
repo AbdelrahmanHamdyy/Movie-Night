@@ -267,7 +267,7 @@ moviesRouter.post(
  * @swagger
  * /cover-trailer:
  *   post:
- *     summary: Adds a cover for a given movie
+ *     summary: Adds a cover or trailer for a given movie according to the file type
  *     tags: [Movies]
  *     requestBody:
  *       required: true
@@ -278,6 +278,8 @@ moviesRouter.post(
  *               - type
  *               - file
  *               - id
+ *               - cover
+ *               - trailer
  *             properties:
  *               id:
  *                 type: number
@@ -295,7 +297,7 @@ moviesRouter.post(
  *                 description: Trailer video file
  *     responses:
  *       200:
- *         description: Movie cover added successfully
+ *         description: Movie cover or trailer added successfully
  *       400:
  *         description: The request was invalid. You may refer to response for details around why the request was invalid
  *         content:
@@ -306,7 +308,7 @@ moviesRouter.post(
  *                   type: string
  *                   description: Type of error
  *       409:
- *         description: Unauthorized to add a new movie cover
+ *         description: Unauthorized to add a new movie cover or trailer
  *         content:
  *           application/json:
  *             schema:
