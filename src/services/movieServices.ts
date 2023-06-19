@@ -1,11 +1,13 @@
+// @ts-nocheck
 import { Request } from "express";
-import { Movie, MovieData } from "../models/Movie";
-import { UserRating, UserRatingData } from "../models/UserRating";
-import { Watchlist } from "../models/Watchlist";
-import ReqError from "../utils/error";
-import { FilmMaker } from "../models/FilmMaker";
-import { Company } from "../models/Company";
-import { Genre } from "../models/Genre";
+import { Movie, MovieData } from "../models/Movie.ts";
+import { UserRating, UserRatingData } from "../models/UserRating.ts";
+import { Watchlist } from "../models/Watchlist.ts";
+import ReqError from "../utils/error.ts";
+import { FilmMaker } from "../models/FilmMaker.ts";
+import { Company } from "../models/Company.ts";
+import { Genre } from "../models/Genre.ts";
+import { deleteFile } from "../utils/files.ts";
 
 const movieModel = new Movie();
 const movieGenre = new Genre();
@@ -13,12 +15,6 @@ const userRating = new UserRating();
 const watchlist = new Watchlist();
 const filmMaker = new FilmMaker();
 const company = new Company();
-
-declare module "express" {
-  interface File {
-    photo?: Object;
-  }
-}
 
 /**
  * This service function returns details about a movie given its id from the database
@@ -134,11 +130,11 @@ export async function checkMovieById(id: number): Promise<MovieData> {
 }
 
 /**
- * This function takes a movie id and checks if it's found in the database
- * or may have been deleted, then throws an error with a proper message
+ * This function takes a movie id and a genres array and checks
+ * if the given genres are already inserted with the movie and adds it if not
  *
  * @param {number} id Movie ID
- * @param {Array} id Genres under this movie
+ * @param {Array} genres Genres under this movie
  * @returns {void}
  */
 export async function addGenres(id: number, genres: string[]): Promise<void> {
@@ -157,4 +153,39 @@ export async function addGenres(id: number, genres: string[]): Promise<void> {
     }
     await movieGenre.addMovieGenre(id, genreName);
   }
+}
+
+/**
+ * This function takes a movie object and inserts the cover or trailer
+ * after deleting the existing ones. It determines which one to insert
+ * through the type argument and the files is the array containing the cover or trailer upload
+ *
+ * @param {MovieData} movie The movie object
+ * @param {string} type Cover or Trailer
+ * @param {Request["files"]} files Contains the cover or trailer file itself
+ * @returns {void}
+ */
+export async function addCoverTrailer(
+  movie: MovieData,
+  type: string,
+  files: Request["files"]
+): Promise<void> {
+  if (type == "cover") {
+    if (!files || !files?.cover) {
+      const error = new ReqError("Cover file not found");
+      error.statusCode = 400;
+      throw error;
+    }
+    if (movie.cover_url) deleteFile(movie.cover_url as string);
+    movie.cover_url = files?.cover[0].path;
+  } else {
+    if (!files || !files?.trailer) {
+      const error = new ReqError("Trailer not found");
+      error.statusCode = 400;
+      throw error;
+    }
+    if (movie.trailer_url) deleteFile(movie.trailer_url as string);
+    movie.trailer_url = files?.trailer[0].path;
+  }
+  await movieModel.update(movie);
 }

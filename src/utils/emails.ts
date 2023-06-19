@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import nodemailerSendgrid from "nodemailer-sendgrid";
 import dotenv from "dotenv";
-import { UserData } from "../models/User";
+import { UserData } from "../models/User.ts";
 
 dotenv.config();
 
