@@ -7,6 +7,7 @@ import {
   checkMovieById,
   addGenres,
   addCoverTrailer,
+  deleteCoverTrailer,
   editMovie,
 } from "../services/movieServices.ts";
 import { checkAdmin } from "../services/userServices.ts";
@@ -84,6 +85,30 @@ const addMovieCoverTrailer = async (req: Request, res: Response) => {
   }
 };
 
+const deleteMovieCoverTrailer = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    const movieId = req.body.id;
+    const type = req.body.type;
+    await checkAdmin(userId);
+    const movie = await checkMovieById(movieId);
+    await deleteCoverTrailer(movie, type);
+    res
+      .status(200)
+      .json(
+        type == "cover"
+          ? "Movie cover deleted successfully!"
+          : "Movie trailer deleted successfully!"
+      );
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 const updateMovie = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
@@ -106,5 +131,6 @@ export default {
   createMovie,
   addMovieGenres,
   addMovieCoverTrailer,
+  deleteMovieCoverTrailer,
   updateMovie,
 };

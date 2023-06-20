@@ -191,6 +191,28 @@ export async function addCoverTrailer(
 }
 
 /**
+ * This function takes a movie object and ideletes its cover or trailer
+ * according to the type then updates the operation in the database
+ *
+ * @param {MovieData} movie The movie object
+ * @param {string} type Cover or Trailer
+ * @returns {void}
+ */
+export async function deleteCoverTrailer(
+  movie: MovieData,
+  type: string
+): Promise<void> {
+  if (type == "cover") {
+    if (movie.cover_url) deleteFile(movie.cover_url as string);
+    movie.cover_url = null;
+  } else {
+    if (movie.trailer_url) deleteFile(movie.trailer_url as string);
+    movie.trailer_url = null;
+  }
+  await movieModel.update(movie);
+}
+
+/**
  * This function takes in the movie fron its id and the request body
  * which will use it to update the movie details one by one
  * and check for validations when needed

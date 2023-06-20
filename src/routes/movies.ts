@@ -277,7 +277,6 @@ moviesRouter.post(
  *           schema:
  *             required:
  *               - type
- *               - file
  *               - id
  *               - cover
  *               - trailer
@@ -328,6 +327,63 @@ moviesRouter.post(
   movieCoverTrailerValidator,
   validateRequestSchema,
   moviesController.addMovieCoverTrailer
+);
+
+/**
+ * @swagger
+ * /cover-trailer:
+ *   delete:
+ *     summary: Deletes a cover or trailer
+ *     tags: [Movies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - id
+ *               - type
+ *             properties:
+ *               id:
+ *                 type: number
+ *                 description: Movie ID
+ *               type:
+ *                 type: string
+ *                 enum:
+ *                   - cover
+ *                   - trailer
+ *     responses:
+ *       200:
+ *         description: Movie cover or trailer deleted successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       409:
+ *         description: Unauthorized to delete a movie cover or trailer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.delete(
+  "/cover-trailer",
+  verifyAuthToken,
+  movieCoverTrailerValidator,
+  validateRequestSchema,
+  moviesController.deleteMovieCoverTrailer
 );
 
 /**
