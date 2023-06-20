@@ -5,6 +5,7 @@ import {
   createMovieValidator,
   movieGenresValidator,
   movieCoverTrailerValidator,
+  updateMovieValidator,
 } from "../validators/movieValidators.ts";
 import { optionalToken, verifyAuthToken } from "../middlewares/verifyToken.ts";
 import moviesController from "../controllers/moviesController.ts";
@@ -327,6 +328,89 @@ moviesRouter.post(
   movieCoverTrailerValidator,
   validateRequestSchema,
   moviesController.addMovieCoverTrailer
+);
+
+/**
+ * @swagger
+ * /movie:
+ *   put:
+ *     summary: Update details of a given movie
+ *     tags: [Movies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - id
+ *             properties:
+ *               id:
+ *                 type: number
+ *                 description: Movie ID
+ *               title:
+ *                 type: string
+ *                 description: Movie Title
+ *               about:
+ *                 type: string
+ *                 description: Brief description of what the movie is about
+ *               duration:
+ *                 type: number
+ *                 description: Movie duration (Example - 142 means 1 hour 42 minutes)
+ *               budget:
+ *                 type: number
+ *                 format: double
+ *                 description: Estimated budget for this movie
+ *               releaseDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The date in which the movie is expected to be released
+ *               language:
+ *                 type: string
+ *                 description: The main language used in the movie
+ *               country:
+ *                 type: string
+ *                 description: The country where the movie originated from
+ *               directorId:
+ *                 type: number
+ *                 description: Movie director ID
+ *               producerId:
+ *                 type: number
+ *                 description: Movie producer ID
+ *               companyId:
+ *                 type: number
+ *                 description: Production Company ID
+ *     responses:
+ *       200:
+ *         description: Movie updated successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       409:
+ *         description: Unauthorized to update a movie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.put(
+  "/movie",
+  verifyAuthToken,
+  updateMovieValidator,
+  validateRequestSchema,
+  moviesController.updateMovie
 );
 
 export default moviesRouter;

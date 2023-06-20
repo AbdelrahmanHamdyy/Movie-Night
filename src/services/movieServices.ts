@@ -69,15 +69,15 @@ export async function checkMovieMakers(
   const { directorId, producerId, companyId } = reqBody;
   let errorMsg: string | undefined;
   const director = await filmMaker.getDirectorById(directorId);
-  if (!director) {
+  if (directorId && !director) {
     errorMsg = "Invalid director ID";
   }
   const producer = await filmMaker.getProducerById(producerId);
-  if (!producer) {
+  if (producerId && !producer) {
     errorMsg = "Invalid producer ID";
   }
   const productionCompany = await company.getCompanyById(companyId);
-  if (!productionCompany) {
+  if (companyId && !productionCompany) {
     errorMsg = "Invalid production company ID";
   }
   if (errorMsg) {
@@ -187,5 +187,34 @@ export async function addCoverTrailer(
     if (movie.trailer_url) deleteFile(movie.trailer_url as string);
     movie.trailer_url = files?.trailer[0].path;
   }
+  await movieModel.update(movie);
+}
+
+/**
+ * This function takes in the movie fron its id and the request body
+ * which will use it to update the movie details one by one
+ * and check for validations when needed
+ *
+ * @param {MovieData} movie The movie object
+ * @param {Request["body"]} body Request body containing the new movie details
+ * @returns {void}
+ */
+export async function editMovie(
+  movie: MovieData,
+  body: Request["body"]
+): Promise<void> {
+  movie.title = body.title ?? movie.title;
+  movie.about = body.about ?? movie.about;
+  movie.language = body.language ?? movie.language;
+  movie.country = body.country ?? movie.country;
+  movie.duration = body.duration ?? movie.duration;
+  movie.budget = body.budget ?? movie.budget;
+  movie.release_date = body.releaseDate ?? movie.release_date;
+
+  await checkMovieMakers(body);
+  movie.director_id = body.directorId ?? movie.director_id;
+  movie.producer_id = body.producerId ?? movie.producer_id;
+  movie.company_id = body.companyId ?? movie.company_id;
+
   await movieModel.update(movie);
 }

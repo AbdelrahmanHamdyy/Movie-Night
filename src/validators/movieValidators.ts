@@ -81,3 +81,27 @@ export const movieCoverTrailerValidator = [
     .isIn(["cover", "trailer"])
     .withMessage("Type must be either cover or trailer only"),
 ];
+
+export const updateMovieValidator = [
+  body("id")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Movie ID can't be empty")
+    .isNumeric()
+    .withMessage("Movie ID must be a number"),
+  body("budget").isNumeric().withMessage("Budget must be a number"),
+  body("releaseDate").isDate().withMessage("Release Date must be a date"),
+  body("title")
+    .isAlphanumeric()
+    .withMessage("Title must be letters or numbers only"),
+  body("about")
+    .isAlphanumeric()
+    .withMessage("About must be in letters or numbers only"),
+  body("duration").isNumeric().withMessage("Duration must be a number"),
+  body("language").isAlpha().withMessage("Language must be alpha"),
+  body("country").isAlpha().withMessage("Country must be alpha"),
+  body(["directorId", "producerId", "companyId"])
+    .isNumeric()
+    .withMessage("ID must be a number"),
+];
