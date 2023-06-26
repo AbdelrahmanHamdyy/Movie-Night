@@ -35,7 +35,7 @@ const usernameAvailable = async (req: Request, res: Response) => {
     const username = req.query.username as string;
     const result = await user.getUserByUsername(username);
     if (result) {
-      return res.status(409).json("Username is already taken");
+      return res.status(401).json("Username is already taken");
     }
     return res.status(200).json("Username is available");
   } catch (err) {
@@ -49,7 +49,7 @@ const emailAvailable = async (req: Request, res: Response) => {
     const email = req.query.email as string;
     const result = await user.getUserByEmail(email);
     if (result) {
-      return res.status(409).json("Email is already taken");
+      return res.status(401).json("Email is already taken");
     }
     return res.status(200).json("Email is available");
   } catch (err) {

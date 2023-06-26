@@ -107,7 +107,7 @@ signupRouter.post(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Username is already taken
  *         content:
  *           application/json:
@@ -151,7 +151,7 @@ signupRouter.get(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Email is already taken
  *         content:
  *           application/json:

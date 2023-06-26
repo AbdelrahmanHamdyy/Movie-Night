@@ -169,7 +169,7 @@ loginRouter.post(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Invalid Token
  *         content:
  *           application/json:
