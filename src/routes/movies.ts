@@ -35,7 +35,7 @@ const moviesRouter = express.Router();
  *          about:
  *              type: string
  *              description: Description about the story of the movie and its main idea
- *          photo:
+ *          cover:
  *              type: string
  *              description: Display picture path of the movie
  *          trailer:
@@ -49,10 +49,6 @@ const moviesRouter = express.Router();
  *              description: Rating of the movie averaged from users who rated it
  *              minimum: 0
  *              maximum: 10
- *          budget:
- *              type: number
- *              format: double
- *              description: Budget of the movie
  *          release_date:
  *              type: string
  *              format: date-time
@@ -60,6 +56,22 @@ const moviesRouter = express.Router();
  *          language:
  *              type: string
  *              description: Language in which the movie was written with
+ *          country:
+ *              type: string
+ *              description: Movie originated in this country
+ *          director_id:
+ *              type: number
+ *              description: Movie director ID
+ *          producer_id:
+ *              type: number
+ *              description: Movie producer ID
+ *          company_id:
+ *              type: number
+ *              description: Production Company ID
+ *          budget:
+ *              type: number
+ *              format: double
+ *              description: Estimated budget for this movie
  *          added_to_watchlist:
  *              type: boolean
  *              description: Indicates whether this movie was added to the watchlist in case there's a logged in user
@@ -185,7 +197,7 @@ moviesRouter.get(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Unauthorized to add a new movie
  *         content:
  *           application/json:
@@ -242,7 +254,7 @@ moviesRouter.post(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Unauthorized to add a new movie
  *         content:
  *           application/json:
@@ -307,7 +319,7 @@ moviesRouter.post(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Unauthorized to add a new movie cover or trailer
  *         content:
  *           application/json:
@@ -364,7 +376,7 @@ moviesRouter.post(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Unauthorized to delete a movie cover or trailer
  *         content:
  *           application/json:
@@ -447,7 +459,7 @@ moviesRouter.delete(
  *                 error:
  *                   type: string
  *                   description: Type of error
- *       409:
+ *       401:
  *         description: Unauthorized to update a movie
  *         content:
  *           application/json:
