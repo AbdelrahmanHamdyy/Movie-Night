@@ -7,22 +7,41 @@ export type WatchlistData = {
 };
 
 export class Watchlist {
-  async add(watchlist: WatchlistData): Promise<WatchlistData> {
+  async add(userId: number, movieId: number): Promise<WatchlistData> {
     try {
       const conn = await client.connect();
       const sql = "INSERT INTO watch_list(user_id, movie_id) VALUES($1, $2);";
 
-      const result = await conn.query(sql, [
-        watchlist.user_id,
-        watchlist.movie_id,
-      ]);
+      const result = await conn.query(sql, [userId, movieId]);
       conn.release();
 
       return result.rows[0];
     } catch (error) {
       console.error(error);
       throw new Error(
-        `Failed to add movie ${watchlist.movie_id} to user ${watchlist.user_id} Watchlist!`
+        `Failed to add movie ${movieId} to user ${userId} Watchlist!`
+      );
+    }
+  }
+
+  async get(
+    userId: number,
+    skip: number,
+    limit: number
+  ): Promise<Array<WatchlistData>> {
+    try {
+      const conn = await client.connect();
+      const sql = `SELECT * FROM watch_list INNER JOIN movies ON watch_list.movie_id=movies.id 
+        ORDER BY watch_list.created_at LIMIT $1 OFFSET $2;`;
+
+      const result = await conn.query(sql, [limit, skip]);
+      conn.release();
+
+      return result.rows;
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to get movies from the watchlist of user ${userId}!`
       );
     }
   }
