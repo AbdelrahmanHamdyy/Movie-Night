@@ -127,6 +127,53 @@ moviesRouter.get(
 
 /**
  * @swagger
+ * /movie/{id}:
+ *   delete:
+ *     summary: Deletes a movie
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: Movie ID
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       204:
+ *         description: Movie deleted successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       401:
+ *         description: Unauthorized to delete a movie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.delete(
+  "/movie/:id",
+  verifyAuthToken,
+  movieIdValidator,
+  validateRequestSchema,
+  moviesController.deleteMovie
+);
+
+/**
+ * @swagger
  * /movie:
  *   post:
  *     summary: Creates a new movie

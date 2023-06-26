@@ -29,6 +29,23 @@ const getMovie = async (req: Request, res: Response) => {
   }
 };
 
+const deleteMovie = async (req: Request, res: Response) => {
+  try {
+    const movieId = req.params.id as unknown as number;
+    const userId = req.payload?.userId;
+    await checkAdmin(userId);
+    await checkMovieById(movieId);
+    await movieModel.destroy(movieId);
+    res.status(204).json("Movie deleted successfully!");
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 const createMovie = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
@@ -133,4 +150,5 @@ export default {
   addMovieCoverTrailer,
   deleteMovieCoverTrailer,
   updateMovie,
+  deleteMovie,
 };
