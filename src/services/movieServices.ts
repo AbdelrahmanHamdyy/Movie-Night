@@ -34,7 +34,7 @@ export async function getMovieDetails(
   let rated: boolean = false;
   let rate: number = 0;
   const movie: MovieData = await movieModel.getMovieById(movieId);
-  if (!movie) {
+  if (!movie || movie.deleted_at) {
     const error = new ReqError("Invalid ID. Movie was not found!");
     error.statusCode = 400;
     throw error;
@@ -121,7 +121,7 @@ export async function createNewMovie(
  */
 export async function checkMovieById(id: number): Promise<MovieData> {
   const movie = await movieModel.getMovieById(id);
-  if (!movie) {
+  if (!movie || movie.deleted_at) {
     const error = new ReqError("Incorrect Movie ID");
     error.statusCode = 400;
     throw error;
