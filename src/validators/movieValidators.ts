@@ -1,4 +1,4 @@
-import { body, check, param } from "express-validator";
+import { body, check, param, query } from "express-validator";
 
 export const movieIdValidator = [
   param("id")
@@ -8,6 +8,10 @@ export const movieIdValidator = [
     .withMessage("Movie ID can't be empty")
     .isNumeric()
     .withMessage("Movie ID must be a number"),
+];
+
+export const getMoviesValidator = [
+  // TODO
 ];
 
 export const createMovieValidator = [
