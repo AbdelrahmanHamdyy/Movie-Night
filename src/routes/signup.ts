@@ -99,7 +99,7 @@ signupRouter.post(
  *       200:
  *         description: The username is available
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -143,7 +143,7 @@ signupRouter.get(
  *       200:
  *         description: The email is available
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -193,7 +193,7 @@ signupRouter.get(
  *       200:
  *         description: Email verified successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:

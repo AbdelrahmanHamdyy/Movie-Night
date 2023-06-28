@@ -62,7 +62,7 @@ const loginRouter = express.Router();
  *                   type: string
  *                   description: JWT Access token to verify that the user is logged in
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -105,7 +105,7 @@ loginRouter.post(
  *       200:
  *         description: Email has been sent
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -161,7 +161,7 @@ loginRouter.post(
  *       200:
  *         description: Password updated successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -209,7 +209,7 @@ loginRouter.post(
  *       200:
  *         description: Email has been sent
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
