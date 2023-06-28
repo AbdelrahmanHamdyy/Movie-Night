@@ -92,9 +92,11 @@ const watchlistRouter = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *                 $ref: '#/components/schemas/Watchlist'
+ *                 type: array
+ *                 items:
+ *                     $ref: '#/components/schemas/Watchlist'
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -136,7 +138,7 @@ watchlistRouter.get(
  *       200:
  *         description: Movie added to watch-list returned successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -185,9 +187,9 @@ watchlistRouter.post(
  *                 description: Movie ID
  *     responses:
  *       204:
- *         description: Movie removed from watch-list returned successfully
+ *         description: Movie removed from watch-list successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:

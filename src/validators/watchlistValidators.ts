@@ -1,4 +1,4 @@
-import { body, check, param, query } from "express-validator";
+import { body, query } from "express-validator";
 
 export const getWatchlistValidator = [
   query("skip")
