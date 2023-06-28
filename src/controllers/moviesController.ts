@@ -29,6 +29,19 @@ const getMovie = async (req: Request, res: Response) => {
   }
 };
 
+const getMovies = async (req: Request, res: Response) => {
+  try {
+    // TODO
+    res.status(200).json("TODO: Return movies here");
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 const deleteMovie = async (req: Request, res: Response) => {
   try {
     const movieId = req.params.id as unknown as number;
@@ -145,6 +158,7 @@ const updateMovie = async (req: Request, res: Response) => {
 
 export default {
   getMovie,
+  getMovies,
   createMovie,
   addMovieGenres,
   addMovieCoverTrailer,

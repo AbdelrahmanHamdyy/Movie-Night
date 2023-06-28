@@ -6,6 +6,7 @@ import {
   movieGenresValidator,
   movieCoverTrailerValidator,
   updateMovieValidator,
+  getMoviesValidator,
 } from "../validators/movieValidators.ts";
 import { optionalToken, verifyAuthToken } from "../middlewares/verifyToken.ts";
 import moviesController from "../controllers/moviesController.ts";
@@ -104,7 +105,7 @@ const moviesRouter = express.Router();
  *             schema:
  *                 $ref: '#/components/schemas/Movie'
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -127,6 +128,75 @@ moviesRouter.get(
 
 /**
  * @swagger
+ * /movies:
+ *   get:
+ *     summary: Returns all movies (This endpoint is a listing)
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: query
+ *         name: skip
+ *         description: The number of movies to skip before returning results
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: limit
+ *         description: The amount of movies returned to be viewed by the user before further scrolling
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: genre
+ *         description: Filter movies by genre
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: sort
+ *         description: Sort movies either by new, old, rating, score (popularity)
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: country
+ *         description: Filter movies by country
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: language
+ *         description: Filter movies by language
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Movies returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: array
+ *                 items:
+ *                     $ref: '#/components/schemas/Movie'
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why this happened
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       500:
+ *         description: Internal server error
+ */
+moviesRouter.get(
+  "/movies",
+  optionalToken,
+  getMoviesValidator,
+  validateRequestSchema,
+  moviesController.getMovies
+);
+
+/**
+ * @swagger
  * /movie/{id}:
  *   delete:
  *     summary: Deletes a movie
@@ -142,7 +212,7 @@ moviesRouter.get(
  *       204:
  *         description: Movie deleted successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -236,7 +306,7 @@ moviesRouter.delete(
  *                     type: number
  *                     description: ID of the newly created movie
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -293,7 +363,7 @@ moviesRouter.post(
  *       200:
  *         description: Movie genres added successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -358,7 +428,7 @@ moviesRouter.post(
  *       200:
  *         description: Movie cover or trailer added successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -415,7 +485,7 @@ moviesRouter.post(
  *       200:
  *         description: Movie cover or trailer deleted successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
@@ -498,7 +568,7 @@ moviesRouter.delete(
  *       200:
  *         description: Movie updated successfully
  *       400:
- *         description: The request was invalid. You may refer to response for details around why the request was invalid
+ *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
  *           application/json:
  *             schema:
