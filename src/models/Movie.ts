@@ -49,18 +49,18 @@ export class Movie {
     }
   }
 
-  async index(): Promise<MovieData[]> {
+  async index(skip: number, limit: number): Promise<MovieData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM movies WHERE deleted_at is NULL;";
+      let sql = `SELECT * FROM movies ORDER BY created_at DESC LIMIT $1 OFFSET $2`;
 
-      const movies = await conn.query(sql);
+      const result = await conn.query(sql, [limit, skip]);
       conn.release();
 
-      return movies.rows;
+      return result.rows;
     } catch (error) {
       console.error(error);
-      throw new Error(`Failed to index all movies!`);
+      throw new Error(`Failed to get all movies!`);
     }
   }
 
