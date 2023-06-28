@@ -31,10 +31,10 @@ export class Watchlist {
   ): Promise<Array<WatchlistData>> {
     try {
       const conn = await client.connect();
-      const sql = `SELECT * FROM watch_list INNER JOIN movies ON watch_list.movie_id=movies.id 
-        ORDER BY watch_list.created_at LIMIT $1 OFFSET $2;`;
+      const sql = `SELECT * FROM watch_list WHERE watch_list.user_id=$1 AND movies.deleted_at is NULL 
+      INNER JOIN movies ON watch_list.movie_id=movies.id ORDER BY watch_list.created_at LIMIT $2 OFFSET $3;`;
 
-      const result = await conn.query(sql, [limit, skip]);
+      const result = await conn.query(sql, [userId, limit, skip]);
       conn.release();
 
       return result.rows;
