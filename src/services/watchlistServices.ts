@@ -1,18 +1,16 @@
-import { Request } from "express";
-import { Movie } from "../models/Movie.ts";
 import { Watchlist, WatchlistData } from "../models/Watchlist.ts";
 import ReqError from "../utils/error.ts";
 
-const movieModel = new Movie();
 const watchlist = new Watchlist();
 
 /**
- *
+ * This function returns the limited watchlist movies of a
+ * certain user showing the movie details and returning the list
  *
  * @param {Number} userId User requesting to see his watchlist
  * @param {Number} skip Number of movies to skip
  * @param {Number} limit Number of movies to return
- * @returns {Array}
+ * @returns {Array<WatchlistData>}
  */
 export async function getWatchlistMovies(
   userId: number,
