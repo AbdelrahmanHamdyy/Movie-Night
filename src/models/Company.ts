@@ -7,6 +7,7 @@ export type CompanyData = {
   photo_url?: string;
   location: string;
   owner_id: number;
+  followed?: boolean;
   created_at?: Date;
   updated_at?: Date;
   deleted_at?: Date | null;
@@ -28,12 +29,16 @@ export class Company {
     }
   }
 
-  async index(skip: number, limit: number): Promise<CompanyData> {
+  async index(
+    skip: number,
+    limit: number,
+    userId: number
+  ): Promise<CompanyData> {
     try {
       const conn = await client.connect();
-      let sql = `SELECT * FROM companies ORDER BY created_at DESC LIMIT $1 OFFSET $2`;
+      let sql = `SELECT *, EXISTS(SELECT * FROM followed_companies WHERE followed_companies.user_id=$1 AND followed_companies.company_id=companies.id) AS followed FROM companies ORDER BY created_at DESC LIMIT $2 OFFSET $3`;
 
-      const result = await conn.query(sql, [limit, skip]);
+      const result = await conn.query(sql, [userId, limit, skip]);
       conn.release();
 
       return result.rows;
@@ -104,14 +109,13 @@ export class Company {
   }
 
   async getFollowedCompanies(
+    userId: number,
     skip: number,
-    limit: number,
-    userId: number
+    limit: number
   ): Promise<CompanyData> {
     try {
       const conn = await client.connect();
-      const sql = `SELECT * FROM followed_companies WHERE user_id=$1 AND companies.deleted_at is NULL 
-      INNER JOIN companies ON followed_companies.company_id=companies.id ORDER BY companies.created_at DESC LIMIT $2 OFFSET $3;`;
+      const sql = `SELECT * FROM followed_companies JOIN companies ON followed_companies.company_id=companies.id WHERE user_id=$1 AND companies.deleted_at is NULL ORDER BY companies.created_at DESC LIMIT $2 OFFSET $3;`;
 
       const result = await conn.query(sql, [userId, limit, skip]);
       conn.release();
@@ -120,6 +124,26 @@ export class Company {
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to get followed companies of user ${userId}!`);
+    }
+  }
+
+  async checkFollowedCompany(
+    userId: number,
+    companyId: number
+  ): Promise<boolean> {
+    try {
+      const conn = await client.connect();
+      const sql = `SELECT * FROM followed_companies WHERE user_id=$1 AND company_id=$2;`;
+
+      const result = await conn.query(sql, [userId, companyId]);
+      conn.release();
+
+      return result.rows.length > 0 ? true : false;
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to check if user ${userId} follows company ${companyId}!`
+      );
     }
   }
 }
