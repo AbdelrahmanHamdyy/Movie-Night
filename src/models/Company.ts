@@ -14,12 +14,16 @@ export type CompanyData = {
 };
 
 export class Company {
-  async getCompanyById(id: number): Promise<CompanyData> {
+  async getCompanyById(
+    id: number,
+    userId: number | undefined
+  ): Promise<CompanyData> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT * FROM companies WHERE id=$1 AND deleted_at is NULL";
+      const sql =
+        "SELECT *, EXISTS(SELECT * FROM followed_companies WHERE followed_companies.user_id=$1 AND followed_companies.company_id=companies.id) AS followed FROM companies WHERE id=$2 AND deleted_at is NULL";
 
-      const result = await conn.query(sql, [id]);
+      const result = await conn.query(sql, [userId, id]);
       conn.release();
 
       return result.rows[0];

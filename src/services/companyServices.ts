@@ -21,8 +21,7 @@ export async function indexCompanies(
   limit: number,
   follow: boolean
 ): Promise<Array<CompanyData>> {
-  let companies: CompanyData;
-  companies = follow
+  const companies = follow
     ? await companyModel.getFollowedCompanies(userId, skip, limit)
     : await companyModel.index(skip, limit, userId);
   return companies;

@@ -23,8 +23,10 @@ const getCompanies = async (req: Request, res: Response) => {
 
 const getCompany = async (req: Request, res: Response) => {
   try {
-    // TODO
-    res.status(200).json("TODO: Return company here");
+    const userId = req.payload?.userId;
+    const companyId = req.params.id as unknown as number;
+    const company = await companyModel.getCompanyById(companyId, userId);
+    res.status(200).json(company);
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
