@@ -40,12 +40,12 @@ const companyRouter = express.Router();
  *          location:
  *              type: string
  *              description: Country in which the company resides
- *          ownerId:
+ *          owner_id:
  *              type: number
  *              description: User ID of the company owner
  *          followed:
  *              type: boolean
- *              description: Determines whether the logged in user follows this company or not
+ *              description: Determines whether the logged in user follows this company or not (In case all companies are returned not only the followed ones)
  */
 
 /**
@@ -105,7 +105,7 @@ companyRouter.get(
 
 /**
  * @swagger
- * /companies/{id}:
+ * /company/{id}:
  *   get:
  *     summary: Returns a company details from its id
  *     tags: [Companies]

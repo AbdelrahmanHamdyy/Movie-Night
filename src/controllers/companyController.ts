@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { Company } from "../models/Company.ts";
-import { checkMovieById } from "../services/movieServices.ts";
+import { indexCompanies } from "../services/companyServices.ts";
 
-const company = new Company();
+const companyModel = new Company();
 
 const getCompanies = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
     const skip = req.query.skip as unknown as number;
     const limit = req.query.limit as unknown as number;
-    const follow = req.query.follow as unknown as number;
-    // TODO
-    res.status(200).json("TODO: Return companies here");
+    const follow = req.query.follow as unknown as boolean;
+    const companies = await indexCompanies(userId, skip, limit, follow);
+    res.status(200).json(companies);
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
