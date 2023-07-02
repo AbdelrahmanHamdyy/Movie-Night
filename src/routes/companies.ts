@@ -34,7 +34,7 @@ const companyRouter = express.Router();
  *          about:
  *              type: string
  *              description: Description about the company background
- *          photo:
+ *          photo_url:
  *              type: string
  *              description: Display picture URL
  *          location:
