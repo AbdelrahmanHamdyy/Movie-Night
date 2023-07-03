@@ -43,5 +43,32 @@ export const followCompanyValidator = [
 ];
 
 export const createCompanyValidator = [
-  // TODO
+  body("name")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Company Name can't be empty")
+    .isAlphanumeric()
+    .withMessage("Company Name must be only letters & numbers"),
+  body("about")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Company about can't be empty")
+    .isAlphanumeric()
+    .withMessage("Company about must be only letters & numbers"),
+  body("location")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Location can't be empty")
+    .isAlpha()
+    .withMessage("Location must be only letters"),
+  body("ownerId")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Owner ID can't be empty")
+    .isNumeric()
+    .withMessage("Owner ID must be a number"),
 ];
