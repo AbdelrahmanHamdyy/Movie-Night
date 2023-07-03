@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { Company } from "../models/Company.ts";
-import { indexCompanies } from "../services/companyServices.ts";
+import {
+  indexCompanies,
+  createNewCompany,
+  checkCompanyById,
+} from "../services/companyServices.ts";
+import { checkAdmin, checkUserById } from "../services/userServices.ts";
 
 const companyModel = new Company();
 
@@ -38,8 +43,11 @@ const getCompany = async (req: Request, res: Response) => {
 
 const createCompany = async (req: Request, res: Response) => {
   try {
-    // TODO
-    res.status(200).json("Company created successfully!");
+    const userId = req.payload?.userId;
+    await checkAdmin(userId);
+    await checkUserById(req.body.ownerId);
+    const companyId = await createNewCompany(req.body, req.files);
+    res.status(200).json(companyId);
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -51,9 +59,11 @@ const createCompany = async (req: Request, res: Response) => {
 
 const deleteCompany = async (req: Request, res: Response) => {
   try {
+    const companyId = req.params.id as unknown as number;
     const userId = req.payload?.userId;
-    const companyId = req.params.movieId as unknown as number;
-    // TODO
+    await checkAdmin(userId);
+    await checkCompanyById(companyId);
+    await companyModel.destroy(companyId);
     res.status(204).json("Company deleted successfully!");
   } catch (error: any) {
     if (error.statusCode) {
@@ -67,8 +77,8 @@ const deleteCompany = async (req: Request, res: Response) => {
 const followCompany = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
-    const companyId = req.params.movieId as unknown as number;
-    const followed = req.params.movieId as unknown as boolean;
+    const companyId = req.params.companyId as unknown as number;
+    const followed = req.params.followed as unknown as boolean;
     // TODO
     res.status(200).json("Followed company successfully!");
 
