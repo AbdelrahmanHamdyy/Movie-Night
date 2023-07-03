@@ -49,9 +49,9 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).fields([
     { name: "cover", maxCount: 1 },
+    { name: "photo", maxCount: 1 },
     { name: "images", maxCount: 100 },
     { name: "trailer", maxCount: 1 },
-    { name: "videos", maxCount: 100 },
   ])
 );
 app.use("/images", express.static(path.join(__dirname, "uploads/images")));
