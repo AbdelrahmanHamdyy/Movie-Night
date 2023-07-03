@@ -40,6 +40,13 @@ export const followCompanyValidator = [
     .withMessage("Company ID can't be empty")
     .isNumeric()
     .withMessage("Company ID must be a number"),
+  body("followed")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Followed parameter can't be empty")
+    .isBoolean()
+    .withMessage("Followed must be boolean"),
 ];
 
 export const createCompanyValidator = [
@@ -69,6 +76,28 @@ export const createCompanyValidator = [
     .not()
     .isEmpty()
     .withMessage("Owner ID can't be empty")
+    .isNumeric()
+    .withMessage("Owner ID must be a number"),
+];
+
+export const updateCompanyValidator = [
+  body("id")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Company ID can't be empty")
+    .isNumeric()
+    .withMessage("Company ID must numeric"),
+  body("about")
+    .optional()
+    .isAlphanumeric()
+    .withMessage("Company about must be only letters & numbers"),
+  body("location")
+    .optional()
+    .isAlpha()
+    .withMessage("Location must be only letters"),
+  body("ownerId")
+    .optional()
     .isNumeric()
     .withMessage("Owner ID must be a number"),
 ];
