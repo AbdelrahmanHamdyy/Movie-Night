@@ -213,7 +213,7 @@ export async function deleteCoverTrailer(
 }
 
 /**
- * This function takes in the movie fron its id and the request body
+ * This function takes in the movie from its id and the request body
  * which will use it to update the movie details one by one
  * and check for validations when needed
  *
