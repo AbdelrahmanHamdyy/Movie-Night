@@ -49,7 +49,9 @@ export const fileFilter = (
  */
 export function deleteFile(pathToFile: string): void {
   try {
-    fs.unlinkSync(pathToFile);
+    if (pathToFile) {
+      fs.unlinkSync(pathToFile);
+    }
     // console.log("Successfully deleted the file.");
   } catch (err) {
     // console.log("There is no file to delete.");
