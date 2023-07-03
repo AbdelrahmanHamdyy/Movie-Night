@@ -53,7 +53,7 @@ const companyRouter = express.Router();
  * @swagger
  * /companies:
  *   get:
- *     summary: Returns all companies of Movie-Night (This endpoint is a listing)
+ *     summary: Returns all companies of Movie-Night (This endpoint is a listing & Token is optional)
  *     tags: [Companies]
  *     parameters:
  *       - in: query
@@ -93,8 +93,6 @@ const companyRouter = express.Router();
  *                   description: Type of error
  *       500:
  *         description: Internal server error
- *     security:
- *          - bearerAuth: []
  */
 companyRouter.get(
   "/companies",
@@ -108,7 +106,7 @@ companyRouter.get(
  * @swagger
  * /company/{id}:
  *   get:
- *     summary: Returns a company details from its id
+ *     summary: Returns a company details from its id (Optional Token)
  *     tags: [Companies]
  *     parameters:
  *       - in: path
@@ -135,8 +133,6 @@ companyRouter.get(
  *                   description: Type of error
  *       500:
  *         description: Internal server error
- *     security:
- *          - bearerAuth: []
  */
 companyRouter.get(
   "/company/:id",
