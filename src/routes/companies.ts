@@ -7,6 +7,7 @@ import {
   companyIdValidator,
   followCompanyValidator,
   createCompanyValidator,
+  updateCompanyValidator,
 } from "../validators/companyValidators.ts";
 
 const companyRouter = express.Router();
@@ -315,6 +316,72 @@ companyRouter.post(
   followCompanyValidator,
   validateRequestSchema,
   companyController.followCompany
+);
+
+/**
+ * @swagger
+ * /company:
+ *   put:
+ *     summary: Updates a company details
+ *     tags: [Companies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             required:
+ *                - id
+ *             properties:
+ *               id:
+ *                   type: number
+ *                   description: Company ID to be updated
+ *               name:
+ *                   type: string
+ *                   description: New company name (Must be unique)
+ *               about:
+ *                   type: string
+ *                   description: New company about
+ *               photo:
+ *                   type: object
+ *                   description: New company image
+ *               location:
+ *                   type: string
+ *                   description: In case the company relocated
+ *               ownerId:
+ *                   type: number
+ *                   description: Company now has a new owner
+ *     responses:
+ *       200:
+ *         description: Company updated successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why this happened
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       401:
+ *         description: Unauthorized to update a company
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+companyRouter.put(
+  "/company",
+  verifyAuthToken,
+  updateCompanyValidator,
+  validateRequestSchema,
+  companyController.updateCompany
 );
 
 export default companyRouter;
