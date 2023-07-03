@@ -150,4 +150,19 @@ export class Company {
       );
     }
   }
+
+  async checkUniqueName(name: string): Promise<boolean> {
+    try {
+      const conn = await client.connect();
+      const sql = `SELECT * FROM companies WHERE name=$1 AND deleted_at is NULL;`;
+
+      const result = await conn.query(sql, [name]);
+      conn.release();
+
+      return result.rows.length > 0 ? false : true;
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to verify company name: ${name}!`);
+    }
+  }
 }
