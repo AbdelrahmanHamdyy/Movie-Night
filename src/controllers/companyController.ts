@@ -4,6 +4,8 @@ import {
   indexCompanies,
   createNewCompany,
   checkCompanyById,
+  manageFollowingCompany,
+  editCompany,
 } from "../services/companyServices.ts";
 import { checkAdmin, checkUserById } from "../services/userServices.ts";
 
@@ -79,10 +81,29 @@ const followCompany = async (req: Request, res: Response) => {
     const userId = req.payload?.userId;
     const companyId = req.params.companyId as unknown as number;
     const followed = req.params.followed as unknown as boolean;
-    // TODO
-    res.status(200).json("Followed company successfully!");
+    const resonseMsg = await manageFollowingCompany(
+      userId,
+      companyId,
+      followed
+    );
+    res.status(200).json(resonseMsg);
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
 
-    res.status(200).json("Unfollowed company successfully!");
+const updateCompany = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    const companyId = req.body.id;
+    await checkAdmin(userId);
+    const company = await checkCompanyById(companyId);
+    await editCompany(company, req.body, req.files);
+    res.status(200).json("Company updated successfully");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -98,4 +119,5 @@ export default {
   createCompany,
   deleteCompany,
   followCompany,
+  updateCompany,
 };
