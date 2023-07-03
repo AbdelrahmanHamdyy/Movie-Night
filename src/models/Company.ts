@@ -13,6 +13,11 @@ export type CompanyData = {
   deleted_at?: Date | null;
 };
 
+type followedCompanyData = {
+  user_id: number;
+  company_id: number;
+};
+
 export class Company {
   async getCompanyById(
     id: number,
@@ -163,6 +168,46 @@ export class Company {
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to verify company name: ${name}!`);
+    }
+  }
+
+  async follow(
+    userId: number,
+    companyId: number
+  ): Promise<followedCompanyData> {
+    try {
+      const conn = await client.connect();
+      const sql = `INSERT INTO followed_companies (user_id, company_id) VALUES ($1, $2);`;
+
+      const result = await conn.query(sql, [userId, companyId]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to follow company ${companyId} by user ${userId}!`
+      );
+    }
+  }
+
+  async unfollow(
+    userId: number,
+    companyId: number
+  ): Promise<followedCompanyData> {
+    try {
+      const conn = await client.connect();
+      const sql = `DELETE FROM followed_companies WHERE user_id=$1 AND company_id=$2;`;
+
+      const result = await conn.query(sql, [userId, companyId]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to unfollow company ${companyId} by user ${userId}!`
+      );
     }
   }
 }
