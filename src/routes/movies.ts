@@ -149,23 +149,28 @@ moviesRouter.get(
  *         name: genre
  *         description: Filter movies by genre
  *         schema:
- *           type: number
+ *           type: string
  *       - in: query
  *         name: sort
- *         description: Sort movies either by new, old, rating, score (popularity)
- *         required: true
+ *         description: Sort movies by any of the below options
  *         schema:
- *           type: number
+ *           type: string
+ *           default: new
+ *           enum:
+ *             - new
+ *             - old
+ *             - rating
+ *             - score
  *       - in: query
  *         name: country
  *         description: Filter movies by country
  *         schema:
- *           type: number
+ *           type: string
  *       - in: query
  *         name: language
  *         description: Filter movies by language
  *         schema:
- *           type: number
+ *           type: string
  *     responses:
  *       200:
  *         description: Movies returned successfully
