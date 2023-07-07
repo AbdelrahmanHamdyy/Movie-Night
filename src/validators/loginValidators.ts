@@ -1,5 +1,15 @@
 import { body, param } from "express-validator";
 
+export const userIdValidator = [
+  param("id")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("User ID must not be empty")
+    .isNumeric()
+    .withMessage("User ID must be numeric"),
+];
+
 export const loginValidator = [
   body("username")
     .not()
