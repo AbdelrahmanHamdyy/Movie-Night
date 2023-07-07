@@ -85,23 +85,24 @@ ratingRouter.post(
  *           type: number
  *     responses:
  *       200:
- *         description: Ratings returned successfully
+ *         description: Movie Ratings returned successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 type: array
- *                 description: User Ratings for the given movie
- *                 items:
- *                    type: object
- *                    properties:
- *                       userId:
- *                           type: number
- *                           description: ID of the user who gave this rating
- *                       rate:
- *                           type: number
- *                           description: The user rating
+ *                 ratings:
+ *                    type: array
+ *                    description: User Ratings for the given movie
+ *                    items:
+ *                       type: object
+ *                       properties:
+ *                          userId:
+ *                             type: number
+ *                             description: ID of the user who gave this rating
+ *                          rate:
+ *                             type: number
+ *                             description: The user rating
  *       400:
  *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
@@ -142,17 +143,18 @@ ratingRouter.get(
  *             schema:
  *               type: object
  *               properties:
- *                 type: array
- *                 description: All ratings for this user
- *                 items:
- *                    type: object
- *                    properties:
- *                       movieId:
- *                           type: number
- *                           description: Movie ID
- *                       rate:
- *                           type: number
- *                           description: Rating given for this movie
+ *                 ratings:
+ *                    type: array
+ *                    description: All ratings for this user
+ *                    items:
+ *                       type: object
+ *                       properties:
+ *                          movieId:
+ *                             type: number
+ *                             description: Movie ID
+ *                          rate:
+ *                             type: number
+ *                             description: Rating given for this movie
  *       400:
  *         description: The request was invalid. You may refer to response for details around why this happened
  *         content:
