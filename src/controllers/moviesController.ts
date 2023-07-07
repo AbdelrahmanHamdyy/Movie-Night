@@ -31,7 +31,7 @@ const getMovie = async (req: Request, res: Response) => {
 
 const getMovies = async (req: Request, res: Response) => {
   try {
-    // TODO
+    const { skip, limit, sort, genre, country, language } = req.query;
     res.status(200).json("TODO: Return movies here");
   } catch (error: any) {
     if (error.statusCode) {
