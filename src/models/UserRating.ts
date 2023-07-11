@@ -36,7 +36,7 @@ export class UserRating {
     try {
       const conn = await client.connect();
       const sql =
-        "UPDATE user_ratings SET rate=$1 WHERE user_id=$2 AND movie_id=$3;";
+        "UPDATE user_ratings SET rate=$1 WHERE user_id=$2 AND movie_id=$3 AND deleted_at is NULL;";
 
       const result = await conn.query(sql, [
         userRating.rate,
@@ -58,7 +58,7 @@ export class UserRating {
     try {
       const conn = await client.connect();
       const sql =
-        "SELECT rate FROM user_ratings WHERE user_id=$1 AND movie_id=$2;";
+        "SELECT rate FROM user_ratings WHERE user_id=$1 AND movie_id=$2 AND deleted_at is NULL;";
 
       const result = await conn.query(sql, [userId, movieId]);
       conn.release();
@@ -79,7 +79,7 @@ export class UserRating {
     try {
       const conn = await client.connect();
       const sql =
-        "SELECT EXISTS (SELECT * FROM user_ratings WHERE user_id=$1 AND movie_id=$2);";
+        "SELECT EXISTS (SELECT * FROM user_ratings WHERE user_id=$1 AND movie_id=$2 AND deleted_at is NULL);";
 
       const result = await conn.query(sql, [userId, movieId]);
       conn.release();
@@ -96,7 +96,8 @@ export class UserRating {
   async getNumberOfRatings(movieId: number): Promise<number> {
     try {
       const conn = await client.connect();
-      const sql = "SELECT COUNT(*) FROM user_ratings WHERE movie_id=$1;";
+      const sql =
+        "SELECT COUNT(*) FROM user_ratings WHERE movie_id=$1 AND deleted_at is NULL;";
 
       const result = await conn.query(sql, [movieId]);
       conn.release();
@@ -114,7 +115,7 @@ export class UserRating {
     try {
       const conn = await client.connect();
       const sql =
-        "SELECT * FROM user_ratings WHERE user_id=$1 ORDER BY created_at DESC;";
+        "SELECT * FROM user_ratings WHERE user_id=$1 AND deleted_at is NULL ORDER BY created_at DESC;";
 
       const movies = await conn.query(sql, [userId]);
       conn.release();
@@ -130,7 +131,7 @@ export class UserRating {
     try {
       const conn = await client.connect();
       const sql =
-        "SELECT * FROM user_ratings WHERE movie_id=$1 ORDER BY created_at DESC;";
+        "SELECT * FROM user_ratings WHERE movie_id=$1 AND deleted_at is NULL ORDER BY created_at DESC;";
 
       const movies = await conn.query(sql, [movieId]);
       conn.release();
