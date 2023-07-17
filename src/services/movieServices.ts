@@ -47,6 +47,10 @@ export async function getMovieDetails(
     }
   }
 
+  // Increase Popularity
+  movie.score++;
+  await movieModel.update(movie);
+
   return {
     ...movie,
     inWatchlist,
