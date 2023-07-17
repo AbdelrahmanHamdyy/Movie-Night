@@ -167,4 +167,110 @@ export class Review {
       );
     }
   }
+
+  async likedReview(
+    id: number,
+    userId: number,
+    movieId: number
+  ): Promise<boolean> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "SELECT * FROM review_reactions WHERE id=$1 AND user_id=$2 AND movie_id=$3 AND like;";
+
+      const result = await conn.query(sql, [id, userId, movieId]);
+      conn.release();
+
+      return result.rows[0] ? true : false;
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to check if this review of user ${userId} on movie ${movieId} is liked by user ${id}!`
+      );
+    }
+  }
+
+  async dislikedReview(
+    id: number,
+    userId: number,
+    movieId: number
+  ): Promise<boolean> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "SELECT * FROM review_reactions WHERE id=$1 AND user_id=$2 AND movie_id=$3 AND NOT like;";
+
+      const result = await conn.query(sql, [id, userId, movieId]);
+      conn.release();
+
+      return result.rows[0] ? true : false;
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to check if this review of user ${userId} on movie ${movieId} is disliked by user ${id}!`
+      );
+    }
+  }
+
+  async addToReactions(
+    id: number,
+    userId: number,
+    movieId: number,
+    like: boolean
+  ): Promise<ReviewData> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "INSERT INTO review_reactions(id, user_id, movie_id, like) VALUES($1, $2, $3, $4);";
+
+      const result = await conn.query(sql, [id, userId, movieId, like]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to add this record to review reactions!`);
+    }
+  }
+
+  async removeFromReactions(
+    id: number,
+    userId: number,
+    movieId: number
+  ): Promise<ReviewData> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "DELETE FROM review_reactions WHERE id=$1 AND user_id=$2 AND movie_id=$3;";
+
+      const result = await conn.query(sql, [id, userId, movieId]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to delete review reaction!`);
+    }
+  }
+
+  async updateReaction(
+    id: number,
+    userId: number,
+    movieId: number,
+    like: boolean
+  ): Promise<ReviewData> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "UPDATE review_reactions SET like=$1 WHERE id=$2 AND user_id=$3 AND movie_id=$4;";
+
+      const result = await conn.query(sql, [like, id, userId, movieId]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to update review reaction!`);
+    }
+  }
 }
