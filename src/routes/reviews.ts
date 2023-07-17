@@ -256,7 +256,7 @@ reviewRouter.get(
  * @swagger
  * /review-reaction:
  *   post:
- *     summary: Deletes a user review
+ *     summary: Like or dislike a review
  *     tags: [Reviews]
  *     requestBody:
  *       required: true
@@ -270,7 +270,7 @@ reviewRouter.get(
  *             properties:
  *               userId:
  *                 type: number
- *                 description: Movie ID
+ *                 description: User ID
  *               movieId:
  *                 type: number
  *                 description: Movie ID

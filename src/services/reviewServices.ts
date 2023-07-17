@@ -46,7 +46,10 @@ export async function createReview(
 }
 
 /**
- *
+ * Edit a review by first setting the review values of the body
+ * in case they are present and then update the record using the
+ * model db update function. We also check for the actor ID and
+ * throw an error in case it's invalid.
  *
  * @param {Number} userId User updating review
  * @param {Number} movieId Movie ID
@@ -76,7 +79,9 @@ export async function editReview(
 }
 
 /**
- *
+ * This function returns a user review from the user ID and
+ * movie ID. In case the review doesn't exist, it throws an error
+ * with status code 400.
  *
  * @param {Number} userId User ID
  * @param {Number} movieId Movie ID
@@ -96,7 +101,11 @@ export async function getUserReview(
 }
 
 /**
- *
+ * This if the main function that gets called when a user likes or dislikes
+ * a review. We first determine whether this user has already liked or disliked
+ * the review before and according to the decision of both, we increment and
+ * decrement the number of likes/dislikes while setting an appropriate response
+ * message and finally updating the review model.
  *
  * @param {Number} id Logged In User ID
  * @param {Number} userId User who owns the review
