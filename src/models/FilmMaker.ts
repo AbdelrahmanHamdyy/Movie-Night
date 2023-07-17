@@ -50,4 +50,20 @@ export class FilmMaker {
       throw new Error(`Failed to get producer with id ${id}!`);
     }
   }
+
+  async getActorById(id: number): Promise<FilmMakerData> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "SELECT * FROM film_makers WHERE id=$1 AND deleted_at is NULL AND is_actor;";
+
+      const result = await conn.query(sql, [id]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to get actor with id ${id}!`);
+    }
+  }
 }
