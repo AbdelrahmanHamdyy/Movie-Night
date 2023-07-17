@@ -9,7 +9,10 @@ const movieModel = new Movie();
 const filmMaker = new FilmMaker();
 
 /**
- *
+ * This function creates a new review through the body contents
+ * after validating the actor ID and setting the spoiler and recommended
+ * as false in case they are undefined. Then, we call the create db function
+ * from the review model.
  *
  * @param {Number} userId User reviewing the movie
  * @param {Number} movieId ID of the movie to be reviewed
@@ -107,7 +110,41 @@ export async function react(
   movieId: number,
   like: boolean
 ): Promise<string> {
-  return "";
+  const review = await reviewModel.get(userId, movieId);
+  const liked = await reviewModel.likedReview(id, userId, movieId);
+  const disliked = await reviewModel.dislikedReview(id, userId, movieId);
+  let msg = "";
+  if (like) {
+    msg = "Liked review successfully";
+    if (!liked && disliked) {
+      review.likes && review.likes++;
+      review.dislikes && review.dislikes--;
+      await reviewModel.updateReaction(id, userId, movieId, true);
+    } else if (!liked && !disliked) {
+      review.likes && review.likes++;
+      await reviewModel.addToReactions(id, userId, movieId, true);
+    } else if (liked && !disliked) {
+      review.likes && review.likes--;
+      msg = "Removed like on review successfully";
+      await reviewModel.removeFromReactions(id, userId, movieId);
+    }
+  } else {
+    msg = "Disliked review successfully";
+    if (!disliked && liked) {
+      review.dislikes && review.dislikes++;
+      review.likes && review.likes--;
+      await reviewModel.updateReaction(id, userId, movieId, false);
+    } else if (!disliked && !liked) {
+      review.dislikes && review.dislikes++;
+      await reviewModel.addToReactions(id, userId, movieId, false);
+    } else if (disliked && !liked) {
+      review.dislikes && review.dislikes--;
+      msg = "Removed dislike on review successfully";
+      await reviewModel.removeFromReactions(id, userId, movieId);
+    }
+  }
+  await reviewModel.update(review);
+  return msg;
 }
 
 /**
