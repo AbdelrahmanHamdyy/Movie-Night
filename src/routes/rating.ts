@@ -37,7 +37,7 @@ const ratingRouter = express.Router();
  *                 type: number
  *                 description: A number from 0 to 10 for rating a movie by the logged in user
  *     responses:
- *       200:
+ *       201:
  *         description: Rated movie successfully
  *       400:
  *         description: The request was invalid. You may refer to response for details around why this happened
