@@ -6,6 +6,8 @@ export type ReviewData = {
   description: string;
   spoiler: boolean;
   recommended: boolean;
+  likes?: number;
+  dislikes?: number;
   fav_actor_id?: number;
   created_at?: Date;
   updated_at?: Date;
@@ -13,7 +15,7 @@ export type ReviewData = {
 };
 
 export class Review {
-  async add(review: ReviewData): Promise<ReviewData> {
+  async create(review: ReviewData): Promise<ReviewData> {
     try {
       const conn = await client.connect();
       const sql =
@@ -146,6 +148,23 @@ export class Review {
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to index all reviews of movie ${movieId}!`);
+    }
+  }
+
+  async remove(userId: number, movieId: number): Promise<ReviewData> {
+    try {
+      const conn = await client.connect();
+      const sql = "DELETE FROM reviews WHERE user_id=$1 AND movie_id=$2;";
+
+      const result = await conn.query(sql, [userId, movieId]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to delete review of user ${userId} of movie ${movieId}!`
+      );
     }
   }
 }
