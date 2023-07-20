@@ -118,3 +118,27 @@ export const updateMovieValidator = [
     .isNumeric()
     .withMessage("ID must be a number"),
 ];
+
+export const setAwardValidator = [
+  body("movieId")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Movie ID can't be empty")
+    .isNumeric()
+    .withMessage("Movie ID must be a number"),
+  body("type").trim().not().isEmpty().withMessage("Award type cannot be empty"),
+  check("type")
+    .isIn(["bronze", "silver", "gold", "platinum"])
+    .withMessage("Type must be one of bronze, silver, gold or platinum only"),
+];
+
+export const deleteAwardValidator = [
+  body("movieId")
+    .trim()
+    .not()
+    .isEmpty()
+    .withMessage("Movie ID can't be empty")
+    .isNumeric()
+    .withMessage("Movie ID must be a number"),
+];

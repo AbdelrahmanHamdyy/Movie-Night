@@ -156,10 +156,46 @@ const updateMovie = async (req: Request, res: Response) => {
   }
 };
 
+const updateAward = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    const { movieId, type } = req.body;
+    await checkAdmin(userId);
+    await checkMovieById(movieId);
+    await movieModel.setAward(type, movieId);
+    res.status(200).json("Award granted successfully");
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
+const removeAward = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    const movieId = req.body.movieId;
+    await checkAdmin(userId);
+    await checkMovieById(movieId);
+    await movieModel.deleteAward(movieId);
+    res.status(204).json("Award removed successfully");
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 export default {
   getMovie,
   getMovies,
   createMovie,
+  updateAward,
+  removeAward,
   addMovieGenres,
   addMovieCoverTrailer,
   deleteMovieCoverTrailer,

@@ -6,6 +6,7 @@ CREATE TABLE movies (
     trailer_url VARCHAR(255),
     score INT DEFAULT 0,
     rating INT DEFAULT 0,
+    award AWARD_TYPE,
     budget INT,
     release_date TIMESTAMP,
     duration INT NOT NULL,

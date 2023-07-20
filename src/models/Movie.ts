@@ -7,6 +7,7 @@ export type MovieData = {
   language: string;
   country: string;
   duration: number;
+  award?: string;
   cover_url?: string | null;
   trailer_url?: string | null;
   score?: number;
@@ -83,7 +84,7 @@ export class Movie {
     try {
       const conn = await client.connect();
       const sql =
-        "UPDATE movies SET title=$1, about=$2, language=$3, trailer_url=$4, score=$5, rating=$6, budget=$7, release_date=$8, director_id=$9, producer_id=$10, company_id=$11, cover_url=$12, country=$13, duration=$14 WHERE id=$15;";
+        "UPDATE movies SET title=$1, about=$2, language=$3, trailer_url=$4, score=$5, rating=$6, budget=$7, release_date=$8, director_id=$9, producer_id=$10, company_id=$11, cover_url=$12, country=$13, duration=$14 WHERE id=$15 AND deleted_at is NULL;";
 
       const result = await conn.query(sql, [
         movie.title,
@@ -108,6 +109,38 @@ export class Movie {
     } catch (error) {
       console.error(error);
       throw new Error(`Failed to update movie ${movie.title}!`);
+    }
+  }
+
+  async setAward(award: string, id: number): Promise<MovieData> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "UPDATE movies SET award=$1 WHERE id=$2 AND deleted_at is NULL;";
+
+      const result = await conn.query(sql, [award, id]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to set movie ${id} award!`);
+    }
+  }
+
+  async deleteAward(id: number): Promise<MovieData> {
+    try {
+      const conn = await client.connect();
+      const sql =
+        "UPDATE movies SET award=NULL WHERE id=$1 AND deleted_at is NULL;";
+
+      const result = await conn.query(sql, [id]);
+      conn.release();
+
+      return result.rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error(`Failed to remove movie ${id} award!`);
     }
   }
 

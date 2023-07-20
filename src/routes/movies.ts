@@ -7,6 +7,8 @@ import {
   movieCoverTrailerValidator,
   updateMovieValidator,
   getMoviesValidator,
+  setAwardValidator,
+  deleteAwardValidator,
 } from "../validators/movieValidators.ts";
 import { optionalToken, verifyAuthToken } from "../middlewares/verifyToken.ts";
 import moviesController from "../controllers/moviesController.ts";
@@ -60,6 +62,9 @@ const moviesRouter = express.Router();
  *          country:
  *              type: string
  *              description: Movie originated in this country
+ *          award:
+ *              type: string
+ *              description: Award given to a movie (Bronze/Silver/Gold)
  *          director_id:
  *              type: number
  *              description: Movie director ID
@@ -601,6 +606,117 @@ moviesRouter.put(
   updateMovieValidator,
   validateRequestSchema,
   moviesController.updateMovie
+);
+
+/**
+ * @swagger
+ * /award:
+ *   put:
+ *     summary: Give a movie an award
+ *     tags: [Movies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - movieId
+ *               - type
+ *             properties:
+ *               movieId:
+ *                 type: number
+ *                 description: Movie ID
+ *               type:
+ *                 type: string
+ *                 description: Award type
+ *                 enum:
+ *                   - bronze
+ *                   - silver
+ *                   - gold
+ *                   - platinum
+ *     responses:
+ *       200:
+ *         description: Award granted successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why this happened
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       401:
+ *         description: Unauthorized to give this movie an award
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.put(
+  "/award",
+  verifyAuthToken,
+  setAwardValidator,
+  validateRequestSchema,
+  moviesController.updateAward
+);
+
+/**
+ * @swagger
+ * /award:
+ *   delete:
+ *     summary: Remove an award for a movie
+ *     tags: [Movies]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             required:
+ *               - movieId
+ *             properties:
+ *               movieId:
+ *                 type: number
+ *                 description: Movie ID
+ *     responses:
+ *       204:
+ *         description: Award removed successfully
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why this happened
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       401:
+ *         description: Unauthorized to strip a movie off its award
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message
+ *       500:
+ *         description: Internal server error
+ *     security:
+ *          - bearerAuth: []
+ */
+moviesRouter.delete(
+  "/award",
+  verifyAuthToken,
+  deleteAwardValidator,
+  validateRequestSchema,
+  moviesController.removeAward
 );
 
 export default moviesRouter;
