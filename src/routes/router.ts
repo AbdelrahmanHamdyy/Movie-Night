@@ -7,6 +7,7 @@ import watchlistRouter from "./watchlist.ts";
 import companyRouter from "./companies.ts";
 import ratingRouter from "./rating.ts";
 import reviewRouter from "./reviews.ts";
+import filmMakerRouter from "./filmMakers.ts";
 
 const mainRouter = express.Router();
 
@@ -17,6 +18,7 @@ mainRouter.use(watchlistRouter);
 mainRouter.use(companyRouter);
 mainRouter.use(ratingRouter);
 mainRouter.use(reviewRouter);
+mainRouter.use(filmMakerRouter);
 
 mainRouter.use((req: Request, res: Response) => {
   res.status(404).json(`Can't ${req.method} ${req.url}`);
