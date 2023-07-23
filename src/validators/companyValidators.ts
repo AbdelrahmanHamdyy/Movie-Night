@@ -61,9 +61,9 @@ export const createCompanyValidator = [
     .trim()
     .not()
     .isEmpty()
-    .withMessage("Company about can't be empty")
-    .isAlphanumeric()
-    .withMessage("Company about must be only letters & numbers"),
+    .withMessage("Company must have an about")
+    .isLength({ max: 100 })
+    .withMessage("Company about must be less than 100 characters"),
   body("location")
     .trim()
     .not()
