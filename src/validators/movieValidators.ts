@@ -142,3 +142,19 @@ export const deleteAwardValidator = [
     .isNumeric()
     .withMessage("Movie ID must be a number"),
 ];
+
+export const searchMoviesValidator = [
+  query("query").not().isEmpty().withMessage("Search Query cannot be empty!"),
+  query("skip")
+    .not()
+    .isEmpty()
+    .withMessage("Skip parameter cannot be empty!")
+    .isNumeric()
+    .withMessage("Skip must be a number!"),
+  query("limit")
+    .not()
+    .isEmpty()
+    .withMessage("Limit parameter cannot be empty!")
+    .isNumeric()
+    .withMessage("Limit must be a number!"),
+];
