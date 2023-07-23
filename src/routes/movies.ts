@@ -9,6 +9,7 @@ import {
   getMoviesValidator,
   setAwardValidator,
   deleteAwardValidator,
+  searchMoviesValidator,
 } from "../validators/movieValidators.ts";
 import { optionalToken, verifyAuthToken } from "../middlewares/verifyToken.ts";
 import moviesController from "../controllers/moviesController.ts";
@@ -717,6 +718,60 @@ moviesRouter.delete(
   deleteAwardValidator,
   validateRequestSchema,
   moviesController.removeAward
+);
+
+/**
+ * @swagger
+ * /search:
+ *   get:
+ *     summary: Search for a movie from its title or about
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         description: Main search query
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: skip
+ *         description: The number of movies to skip before returning results
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: limit
+ *         description: The amount of movies returned to be viewed by the user before further scrolling
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Search results returned successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *                 type: array
+ *                 items:
+ *                     $ref: '#/components/schemas/Movie'
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why this happened
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       500:
+ *         description: Internal server error
+ */
+moviesRouter.get(
+  "/search",
+  optionalToken,
+  searchMoviesValidator,
+  validateRequestSchema,
+  moviesController.searchMovies
 );
 
 export default moviesRouter;
