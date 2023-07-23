@@ -17,6 +17,37 @@ const filmMaker = new FilmMaker();
 const company = new Company();
 
 /**
+ * This service function returns extra parameters that include whether a logged in
+ * user has rated this movie or not, and whether it's in his watchlist or not. These
+ * params are set to false values in case there is no user
+ *
+ * @param {Number} userId User ID in case there's a logged in user, else undefined
+ * @param {Number} movieId Movie ID
+ * @returns {Promise<Object>}
+ */
+export async function getParams(
+  userId: number | undefined,
+  movieId: number
+): Promise<Object> {
+  let inWatchlist: boolean = false;
+  let rated: boolean = false;
+  let rate: number = 0;
+  if (userId) {
+    inWatchlist = await watchlist.exists(userId, movieId);
+    rate = await userRating.getRating(userId, movieId);
+    if (rate != -1) {
+      rated = true;
+    }
+  }
+
+  return {
+    inWatchlist,
+    rated,
+    rate,
+  };
+}
+
+/**
  * This service function returns details about a movie given its id from the database
  * and returns extra booleans in case there is a logged in user. They are: Movie is in the
  * user's watchlist, he/she has rated it and what rating has he/she given the movie. Then append
@@ -30,22 +61,13 @@ export async function getMovieDetails(
   movieId: number,
   userId: number | undefined
 ): Promise<Object> {
-  let inWatchlist: boolean = false;
-  let rated: boolean = false;
-  let rate: number = 0;
   const movie: MovieData = await movieModel.getMovieById(movieId);
   if (!movie || movie.deleted_at) {
     const error = new ReqError("Invalid ID. Movie was not found!");
     error.statusCode = 400;
     throw error;
   }
-  if (userId) {
-    inWatchlist = await watchlist.exists(userId, movieId);
-    rate = await userRating.getRating(userId, movieId);
-    if (rate != -1) {
-      rated = true;
-    }
-  }
+  let { inWatchlist, rated, rate } = await getParams(userId, movieId);
 
   // Increase Popularity
   movie.score++;
@@ -243,4 +265,40 @@ export async function editMovie(
   movie.company_id = body.companyId ?? movie.company_id;
 
   await movieModel.update(movie);
+}
+
+/**
+ * This service function returns the search results of movies according to
+ * the search query. The optional token applies here so extra parameters will
+ * be added with each movie returned for user operations in case there is a
+ * logged in user. Skip and limit determines the portion of movies to be retrieved
+ * and their size.
+ *
+ * @param {Number} userId User ID in case there's a logged in user, else undefined
+ * @param {Number} searchQuery Query entered by the user for search
+ * @param {Number} skip Number of movies to skip before returning the results
+ * @param {Number} limit The number of movies returned
+ * @returns {Promise<Array<MovieData>>}
+ */
+export async function getSearchedMovies(
+  userId: number | undefined,
+  searchQuery: string,
+  skip: number,
+  limit: number
+): Promise<Array<MovieData>> {
+  let movies = await movieModel.find(searchQuery, skip, limit);
+  movies = movies.map(async (movie) => {
+    let { inWatchlist, rated, rate } = await getParams(userId, movieId);
+    // Increase Popularity
+    movie.score++;
+    await movieModel.update(movie);
+    return {
+      ...movie,
+      inWatchlist,
+      rated,
+      rate,
+    };
+  });
+
+  return movies;
 }
