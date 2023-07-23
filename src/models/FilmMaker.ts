@@ -9,7 +9,7 @@ export type FilmMakerData = {
   gender: string;
   avatar?: string;
   birthday?: Date;
-  is_writer?: string;
+  is_writer?: boolean;
   is_producer?: boolean;
   is_actor?: boolean;
   is_director?: boolean;
