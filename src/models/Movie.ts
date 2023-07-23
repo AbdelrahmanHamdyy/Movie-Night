@@ -158,4 +158,26 @@ export class Movie {
       throw new Error(`Failed to delete movie with id ${id}!`);
     }
   }
+
+  async find(
+    searchQuery: string,
+    skip: number,
+    limit: number
+  ): Promise<Array<MovieData>> {
+    try {
+      const conn = await client.connect();
+      const sql = `SELECT * FROM movies WHERE movies.deleted_at is NULL AND (movies.title LIKE '%$1%' OR movies.about LIKE '%$1%') 
+      ORDER BY movies.created_at DESC LIMIT $2 OFFSET $3;`;
+
+      const result = await conn.query(sql, [searchQuery, limit, skip]);
+      conn.release();
+
+      return result.rows;
+    } catch (error) {
+      console.error(error);
+      throw new Error(
+        `Failed to get search results for the query "${searchQuery}"!`
+      );
+    }
+  }
 }

@@ -9,6 +9,7 @@ import {
   addCoverTrailer,
   deleteCoverTrailer,
   editMovie,
+  getSearchedMovies,
 } from "../services/movieServices.ts";
 import { checkAdmin } from "../services/userServices.ts";
 
@@ -190,6 +191,23 @@ const removeAward = async (req: Request, res: Response) => {
   }
 };
 
+const searchMovies = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    const searchQuery = req.query.query as unknown as string;
+    const skip = req.query.skip as unknown as number;
+    const limit = req.query.limit as unknown as number;
+    const movies = await getSearchedMovies(userId, searchQuery, skip, limit);
+    res.status(200).json(movies);
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 export default {
   getMovie,
   getMovies,
@@ -201,4 +219,5 @@ export default {
   deleteMovieCoverTrailer,
   updateMovie,
   deleteMovie,
+  searchMovies,
 };
