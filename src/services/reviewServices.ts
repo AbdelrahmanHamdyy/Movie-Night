@@ -1,11 +1,9 @@
-import { Movie } from "../models/Movie.ts";
 import { Request } from "express";
 import { Review, ReviewData } from "../models/Review.ts";
 import { FilmMaker } from "../models/FilmMaker.ts";
 import ReqError from "../utils/error.ts";
 
 const reviewModel = new Review();
-const movieModel = new Movie();
 const filmMaker = new FilmMaker();
 
 /**

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Request } from "express";
 import { Movie, MovieData } from "../models/Movie.ts";
-import { UserRating, UserRatingData } from "../models/UserRating.ts";
+import { UserRating, UserRatingData } from "../models/Rating.ts";
 import { Watchlist } from "../models/Watchlist.ts";
 import ReqError from "../utils/error.ts";
 import { FilmMaker } from "../models/FilmMaker.ts";

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserRating } from "../models/UserRating.ts";
+import { UserRating } from "../models/Rating.ts";
 import { rateMovie } from "../services/userRatingServices.ts";
 import { checkMovieById } from "../services/movieServices.ts";
 import { checkUserById } from "../services/userServices.ts";

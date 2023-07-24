@@ -1,6 +1,5 @@
 import { Movie } from "../models/Movie.ts";
-import { UserRating, UserRatingData } from "../models/UserRating.ts";
-import ReqError from "../utils/error.ts";
+import { UserRating, UserRatingData } from "../models/Rating.ts";
 
 const userRating = new UserRating();
 const movieModel = new Movie();
