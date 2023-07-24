@@ -76,6 +76,20 @@ const createMovie = async (req: Request, res: Response) => {
   }
 };
 
+const getMovieGenres = async (req: Request, res: Response) => {
+  try {
+    const userId = req.payload?.userId;
+    // TODO
+    res.status(200).json("Movie genres returned successfully!");
+  } catch (error: any) {
+    if (error.statusCode) {
+      res.status(error.statusCode).json({ error: error.message });
+    } else {
+      res.status(500).json("Internal server error");
+    }
+  }
+};
+
 const addMovieGenres = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
@@ -214,6 +228,7 @@ export default {
   createMovie,
   updateAward,
   removeAward,
+  getMovieGenres,
   addMovieGenres,
   addMovieCoverTrailer,
   deleteMovieCoverTrailer,

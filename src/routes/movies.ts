@@ -406,6 +406,48 @@ moviesRouter.post(
 
 /**
  * @swagger
+ * /movie-genres/{id}:
+ *   get:
+ *     summary: Gets all genres for a certain movie
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: Movie ID
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Movie genres returned successfully successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   description: Genre Name
+ *       400:
+ *         description: The request was invalid. You may refer to response for details around why this happened
+ *         content:
+ *           application/json:
+ *             schema:
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Type of error
+ *       500:
+ *         description: Internal server error
+ */
+moviesRouter.get(
+  "/movie-genres/:id",
+  movieIdValidator,
+  validateRequestSchema,
+  moviesController.getMovieGenres
+);
+
+/**
+ * @swagger
  * /cover-trailer:
  *   post:
  *     summary: Adds a cover or trailer for a given movie according to the file type
