@@ -1,26 +1,16 @@
 import { Request, Response } from "express";
-import { Review } from "../models/Review.ts";
-import {
-  createReview,
-  reviewExists,
-  editReview,
-  getUserReview,
-  react,
-} from "../services/reviewServices.ts";
+import { FilmMaker } from "../models/FilmMaker.ts";
 import { checkMovieById } from "../services/movieServices.ts";
-import { checkUserById } from "../services/userServices.ts";
+import { checkAdmin, checkUserById } from "../services/userServices.ts";
 
-const reviewModel = new Review();
+const filmMakerModel = new FilmMaker();
 
 const createFilmMaker = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
-    const movieId = req.body.movieId as number;
-    await checkUserById(userId);
-    await checkMovieById(movieId);
-    await reviewExists(userId, movieId, false);
-    await createReview(userId, movieId, req.body);
-    res.status(201).json("Review submitted successfully!");
+    await checkAdmin(userId);
+    // TODO
+    res.status(201).json("Film-maker created successfully!");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -33,12 +23,9 @@ const createFilmMaker = async (req: Request, res: Response) => {
 const updateFilmMaker = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
-    const movieId = req.body.movieId as number;
-    await checkUserById(userId);
-    await checkMovieById(movieId);
-    await reviewExists(userId, movieId, true);
-    await editReview(userId, movieId, req.body);
-    res.status(200).json("Updated user review successfully!");
+    await checkAdmin(userId);
+    // TODO
+    res.status(200).json("Updated film-maker successfully!");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -51,12 +38,9 @@ const updateFilmMaker = async (req: Request, res: Response) => {
 const deleteFilmMaker = async (req: Request, res: Response) => {
   try {
     const userId = req.payload?.userId;
-    const movieId = req.body.movieId as number;
-    await checkUserById(userId);
-    await checkMovieById(movieId);
-    await reviewExists(userId, movieId, true);
-    await reviewModel.remove(userId, movieId);
-    res.status(204).json("Review deleted successfully!");
+    await checkAdmin(userId);
+    // TODO
+    res.status(204).json("Film-maker deleted successfully!");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -68,12 +52,8 @@ const deleteFilmMaker = async (req: Request, res: Response) => {
 
 const getFilmMaker = async (req: Request, res: Response) => {
   try {
-    const userId = req.query.userId as unknown as number;
-    const movieId = req.query.movieId as unknown as number;
-    await checkUserById(userId);
-    await checkMovieById(movieId);
-    const review = await getUserReview(userId, movieId);
-    res.status(200).json(review);
+    // TODO
+    res.status(200).json("Film-maker returned successfully");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -85,15 +65,8 @@ const getFilmMaker = async (req: Request, res: Response) => {
 
 const getFilmMakers = async (req: Request, res: Response) => {
   try {
-    const id = req.payload?.id;
-    const userId = req.body.userId as number;
-    const movieId = req.body.movieId as number;
-    const like = req.body.like as boolean;
-    await checkUserById(userId);
-    await checkMovieById(movieId);
-    await reviewExists(userId, movieId, true);
-    const msg = await react(id, userId, movieId, like);
-    res.status(200).json(msg);
+    // TODO
+    res.status(200).json("Film makers returned successfully");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -105,10 +78,8 @@ const getFilmMakers = async (req: Request, res: Response) => {
 
 const getMovieActors = async (req: Request, res: Response) => {
   try {
-    const movieId = req.params.id as unknown as number;
-    await checkMovieById(movieId);
-    const reviews = await reviewModel.getMovieReviews(movieId);
-    res.status(200).json(reviews);
+    // TODO
+    res.status(200).json("Movie actors returned successfully!");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -120,10 +91,8 @@ const getMovieActors = async (req: Request, res: Response) => {
 
 const getMovieWriters = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id as unknown as number;
-    await checkUserById(userId);
-    const reviews = await reviewModel.index(userId);
-    res.status(200).json(reviews);
+    // TODO
+    res.status(200).json("Movie writers returned successfully!");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
@@ -135,10 +104,8 @@ const getMovieWriters = async (req: Request, res: Response) => {
 
 const getFilmMakerMovies = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id as unknown as number;
-    await checkUserById(userId);
-    const reviews = await reviewModel.index(userId);
-    res.status(200).json(reviews);
+    // TODO
+    res.status(200).json("Film-maker movies returned successfully!");
   } catch (error: any) {
     if (error.statusCode) {
       res.status(error.statusCode).json({ error: error.message });
