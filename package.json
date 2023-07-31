@@ -7,6 +7,8 @@
   "scripts": {
     "start": "set NODE_ENV=development && nodemon --esm src/app.ts",
     "typedoc": "npx typedoc --out docs",
+    "swagger-doc": "swagger-jsdoc-generator config.json > api-doc.json",
+    "api-doc": "redoc-cli bundle -o api-doc/index.html api-doc.json",
     "test": "set NODE_ENV=testing && node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
   },
   "author": "Abdelrahman",
@@ -28,6 +30,7 @@
     "pg": "^8.10.0",
     "swagger": "^0.7.5",
     "swagger-jsdoc": "^6.2.8",
+    "swagger-jsdoc-generator": "^1.0.3",
     "swagger-ui-express": "^4.6.2",
     "typedoc": "^0.24.1"
   },
@@ -45,6 +48,7 @@
     "nodemailer": "^6.9.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "path": "^0.12.7",
+    "redoc-cli": "^0.13.20",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
     "tsc-watch": "^6.0.0"
