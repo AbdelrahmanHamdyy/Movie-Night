@@ -21,36 +21,6 @@ const companyRouter = express.Router();
 
 /**
  * @swagger
- * components:
- *  schemas:
- *      Company:
- *        type: object
- *        properties:
- *          id:
- *              type: number
- *              description: Movie ID
- *          name:
- *              type: string
- *              description: Company Name
- *          about:
- *              type: string
- *              description: Description about the company background
- *          photo_url:
- *              type: string
- *              description: Display picture URL
- *          location:
- *              type: string
- *              description: Country in which the company resides
- *          owner_id:
- *              type: number
- *              description: User ID of the company owner
- *          followed:
- *              type: boolean
- *              description: Determines whether the logged in user follows this company or not (In case all companies are returned not only the followed ones)
- */
-
-/**
- * @swagger
  * /companies:
  *   get:
  *     summary: Returns all companies of Movie-Night (This endpoint is a listing & Token is optional)

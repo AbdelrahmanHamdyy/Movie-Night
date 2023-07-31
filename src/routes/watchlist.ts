@@ -18,57 +18,6 @@ const watchlistRouter = express.Router();
 
 /**
  * @swagger
- * components:
- *  schemas:
- *      Watchlist:
- *        type: object
- *        properties:
- *          id:
- *              type: number
- *              description: Movie ID
- *          title:
- *              type: string
- *              description: Movie Title
- *          about:
- *              type: string
- *              description: Description about the story of the movie and its main idea
- *          cover:
- *              type: string
- *              description: Display picture path of the movie
- *          rating:
- *              type: number
- *              description: Rating of the movie averaged from users who rated it
- *              minimum: 0
- *              maximum: 10
- *          release_date:
- *              type: string
- *              format: date-time
- *              description: Movie official release date
- *          language:
- *              type: string
- *              description: Language in which the movie was written with
- *          country:
- *              type: string
- *              description: Movie originated in this country
- *          directorName:
- *              type: string
- *              description: Movie director name
- *          producerName:
- *              type: string
- *              description: Movie producer name
- *          companyName:
- *              type: string
- *              description: Production Company name
- *          rated:
- *              type: boolean
- *              description: Indicates whether the logged in user has rated this movie or not
- *          user_rating:
- *              type: number
- *              description: The user rating in case the rated parameter was true
- */
-
-/**
- * @swagger
  * /watchlist:
  *   get:
  *     summary: Returns the full watchlist of a certain user (This endpoint is a listing)

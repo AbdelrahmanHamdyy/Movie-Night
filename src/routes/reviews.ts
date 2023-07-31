@@ -23,30 +23,6 @@ const reviewRouter = express.Router();
 
 /**
  * @swagger
- * components:
- *  schemas:
- *      Review:
- *        type: object
- *        properties:
- *           movieId:
- *             type: number
- *             description: Movie ID
- *           reviewBody:
- *             type: string
- *             description: Contents of the review
- *           spoiler:
- *             type: boolean
- *             description: This indicates whether this review contains a spoiler to this movie or not
- *           recommended:
- *             type: boolean
- *             description: Indicates whether this user recommends the movie to others or not
- *           favActorID:
- *             type: number
- *             description: This is the ID of the user's favorite actor
- */
-
-/**
- * @swagger
  * /review:
  *   post:
  *     summary: Register a user review for a given movie

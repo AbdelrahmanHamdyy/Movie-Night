@@ -22,55 +22,6 @@ const filmMakerRouter = express.Router();
 
 /**
  * @swagger
- * components:
- *  schemas:
- *      FilmMaker:
- *        type: object
- *        properties:
- *           id:
- *             type: number
- *             description: Film Maker ID
- *           first_name:
- *             type: string
- *             description: First Name
- *           last_name:
- *             type: string
- *             description: Last Name
- *           about:
- *             type: string
- *             description: Quick summary about this film maker.
- *           country:
- *             type: string
- *             description: Nationality
- *           gender:
- *             type: string
- *             default: male
- *             enum:
- *                - male
- *                - female
- *           avatar:
- *             type: string
- *             description: Display picture URL
- *           birthday:
- *             type: string
- *             format: date
- *             description: Date that this person was born
- *           is_writer:
- *             type: boolean
- *             description: True if this film maker is a writer, else False
- *           is_producer:
- *             type: boolean
- *             description: True if this film maker is a producer, else False
- *           is_director:
- *             type: boolean
- *             description: True if this film maker is a director, else False
- *           is_actor:
- *             type: boolean
- *             description: True if this film maker is an actor, else False
- */
-
-/**
- * @swagger
  * /film-maker:
  *   post:
  *     summary: Create an actor, producer, director, or writer
