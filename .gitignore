@@ -104,6 +104,8 @@ dist
 # TernJS port file
 .tern-port
 
+api-doc.json
+api-doc/
 docs/
 sql/
 uploads/
